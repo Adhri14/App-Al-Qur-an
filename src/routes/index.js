@@ -1,0 +1,31 @@
+import React from 'react'
+import {createStackNavigator} from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { Home, PageName, Play, Search, Setting, SplashScreen } from '../pages';
+import { BottomTab } from '../components';
+
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+
+const MainApp = () => {
+   return (
+      <Tab.Navigator initialRouteName="Home" tabBar={props => <BottomTab {...props} />}>
+         <Tab.Screen name="Play" component={Play} options={{tabBarVisible: false}} />
+         <Tab.Screen name="Home" component={Home} />
+         <Tab.Screen name="Setting" component={Setting} />
+      </Tab.Navigator>
+   )
+}
+
+const Route = () => {
+   return (
+      <Stack.Navigator>
+         <Stack.Screen name="SplashScreen" component={SplashScreen} options={{headerShown: false}} />
+         <Stack.Screen name="PageName" component={PageName} options={{headerShown: false}} />
+         <Stack.Screen name="MainApp" component={MainApp} options={{headerShown: false}} />
+         <Stack.Screen name="Search" component={Search} options={{headerShown: false}} />
+      </Stack.Navigator>
+   )
+}
+
+export default Route
