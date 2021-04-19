@@ -1,16 +1,44 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { IcSearch, IlLighting } from '../../assets'
-import { Gap } from '../../components/atoms'
+import { Gap, HeaderTitle } from '../../components/atoms'
 import { Surah } from '../../components/molecules'
 import {Colors, Fonts} from '../../utils'
+import Axios from 'axios';
+import {API_DATE, API_SURAH, location} from '../../config';
 
 const Home = ({navigation}) => {
+   const [date, setDate] = useState('');
+   const [surah, setSurah] = useState([]);
+
+   useEffect(() => {
+      getData();
+   }, []);
+
+   const getData = () => {
+      // call API date arab
+      Axios.get(`${API_DATE}`)
+      .then(res => {
+         setDate(res.data.data.hijri);
+      })
+      .catch(err => console.log(err));
+
+      // call API surah
+      Axios.get(`${API_SURAH}`)
+      .then(res => {
+         console.log(res.data);
+         setSurah(res.data)
+      })
+      .catch(err => {
+         console.log(err);
+      })
+   };
+
    return (
       <View style={styles.page}>
          <StatusBar translucent={true} backgroundColor="transparent" barStyle="dark-content" />
          <ScrollView showsVerticalScrollIndicator={false}>
-            <Text style={styles.titleApp}>Qur'anKu</Text>
+            <HeaderTitle />
             <View style={styles.welcome}>
                <Text style={styles.title}>Assalamualaikum,</Text>
                <Text style={styles.name}>Adhri adly</Text>
@@ -18,10 +46,10 @@ const Home = ({navigation}) => {
             <Gap height={30} />
             <View style={styles.info}>
                <IlLighting style={styles.illustration} />
-               <Text style={styles.date}>5 Ramadhan 1442 H</Text>
+               <Text style={styles.date}>{`${date.day} ${date.month.en} ${date.year} H`}</Text>
                <View style={styles.row}>
                   <Text style={styles.city}>Subuh Di Palembang : </Text>
-                  <Text style={styles.time}>04:43</Text>
+                  <Text style={styles.time}>{location}</Text>
                </View>
             </View>
             <Gap height={30} />
@@ -33,18 +61,9 @@ const Home = ({navigation}) => {
             </View>
             <Gap height={30} />
             <View style={styles.listSurah}>
-               <Surah number={1} title="Al-Fatihah" subtitle="Pembukaan" arab="Al Fatihah" />
-               <Surah number={2} title="Al-Baqarah" subtitle="Sapi Betina" arab="Al Baqarah" />
-               <Surah number={3} title="Ali Imron" subtitle="Keluarga Imron" arab="Ali Imron" />
-               <Surah number={4} title="An-Nisaa" subtitle="Wanita" arab="An Nisaa" />
-               <Surah number={5} title="Al-Ma’idah" subtitle="Hidangan" arab="Al Ma’idah" />
-               <Surah number={6} title="Al-An’am" subtitle="Binatang Ternak" arab="Al An’am" />
-               <Surah number={7} title="Al-A’raf" subtitle="Tempat Tertinggi" arab="Al A’raf" />
-               <Surah number={8} title="Al-Anfal" subtitle="Harta Rampasan Perang" arab="Al Anfal" />
-               <Surah number={9} title="At-Taubah" subtitle="Pengampunan" arab="At Taubah" />
-               <Surah number={10} title="Yunus" subtitle="Yunus" arab="Yunus" />
-               <Surah number={11} title="Hud" subtitle="Hud" arab="Hud" />
-               <Surah number={12} title="Yusuf" subtitle="Yusuf" arab="Yusuf" />
+               {surah.map(surat => (
+                  <Surah key={surat.nomor} number={surat.nomor} title={surat.nama} subtitle={surat.arti} arab={surat.asma} />
+               ))}
             </View>
          </ScrollView>
       </View>
@@ -57,13 +76,6 @@ const styles = StyleSheet.create({
    page: {
       flex: 1,
       backgroundColor: Colors.Other
-   },
-   titleApp: {
-      textAlign: 'center',
-      marginTop: 60,
-      fontFamily: Fonts.Bold,
-      fontSize: 26,
-      color: Colors.PrimaryColor
    },
    welcome:{
       marginTop: 20,
