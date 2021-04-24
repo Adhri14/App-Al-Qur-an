@@ -4,7 +4,7 @@ import { Colors } from '../../../utils';
 import Tab from '../../atoms/Tab';
 
 const BottomTab = ({ state, descriptors, navigation }) => {
-   const focusedOptions = descriptors[state.routes[state.index].key].options;
+  const focusedOptions = descriptors[state.routes[state.index].key].options;
 
   if (focusedOptions.tabBarVisible === false) {
     return null;
@@ -14,10 +14,9 @@ const BottomTab = ({ state, descriptors, navigation }) => {
     <View style={styles.container}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
-        const label =
-          options.tabBarLabel !== undefined
-            ? options.tabBarLabel
-            : options.title !== undefined
+        const label = options.tabBarLabel !== undefined
+          ? options.tabBarLabel
+          : options.title !== undefined
             ? options.title
             : route.name;
 
@@ -43,7 +42,7 @@ const BottomTab = ({ state, descriptors, navigation }) => {
         };
 
         return (
-          <Tab 
+          <Tab
             key={index}
             onPress={onPress}
             onLongPress={onLongPress}
@@ -55,15 +54,15 @@ const BottomTab = ({ state, descriptors, navigation }) => {
       })}
     </View>
   );
-}
+};
 
-export default BottomTab
+export default BottomTab;
 
 const styles = StyleSheet.create({
-   container: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      paddingHorizontal: 72,
-      backgroundColor: Colors.Other
-   }
-})
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 72,
+    backgroundColor: Colors.Other,
+  },
+});
