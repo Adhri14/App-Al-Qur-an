@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension */
 import { useTheme } from '@react-navigation/native';
 import React, { useContext } from 'react';
 import {
@@ -9,7 +10,7 @@ import {
 import { Gap, HeaderTitle, ListSetting } from '../../components';
 import { Colors, Fonts } from '../../utils';
 
-const Setting = () => (
+const Setting = ({ navigation }) => (
   <View style={styles.page}>
     <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
     <HeaderTitle />
@@ -17,7 +18,7 @@ const Setting = () => (
     <View style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.title}>Pengguna</Text>
-        <ListSetting label="Ganti Nama">
+        <ListSetting label="Ganti Nama" onPress={() => navigation.navigate('UpdateName')}>
           <IcEdit />
         </ListSetting>
         <Gap height={20} />
@@ -30,13 +31,13 @@ const Setting = () => (
         </ListSetting>
         <Gap height={20} />
         <View style={styles.line} />
-        <ListSetting label="Tentang">
-          <IcInfo />
+        <ListSetting label="Beri Rating">
+          <IcRate />
         </ListSetting>
         <Gap height={20} />
         <View style={styles.line} />
-        <ListSetting label="Beri Rating">
-          <IcRate />
+        <ListSetting label="Tentang">
+          <IcInfo />
         </ListSetting>
         <Gap height={20} />
         <View style={styles.line} />

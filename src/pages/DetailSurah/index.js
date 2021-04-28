@@ -26,7 +26,6 @@ const DetailSurah = ({ navigation, route }) => {
 
   useEffect(() => {
     setLoading(true);
-    getData('ayat').then((res) => res);
     dispatch(getDataAyat(nomor));
   }, []);
 

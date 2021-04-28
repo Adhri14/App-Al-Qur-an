@@ -3,14 +3,22 @@ import {
   ImageBackground, StatusBar, StyleSheet, Text, View,
 } from 'react-native';
 import { IlBackground } from '../../assets';
+import { Firebase } from '../../config';
 import { Colors, Fonts } from '../../utils';
 
 const SplashScreen = ({ navigation }) => {
   useEffect(() => {
-    setTimeout(() => {
-      navigation.replace('PageName');
-    }, 3000);
-  }, []);
+    const unsubs = Firebase.database().ref('Biodata/').once('value').then((res) => {
+      setTimeout(() => {
+        if (!res) {
+          navigation.replace('PageName');
+        } else {
+          navigation.replace('MainApp');
+        }
+      }, 3000);
+    });
+    return () => unsubs();
+  }, [navigation]);
 
   return (
     <View style={styles.page}>

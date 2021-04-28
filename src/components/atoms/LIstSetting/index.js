@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension */
 import { useTheme } from '@react-navigation/native';
 import React, { Children, useContext, useState } from 'react';
 import {
@@ -12,10 +13,10 @@ const ListSetting = ({
   const [isState, setIsState] = useState(false);
   const toggleSwitch = () => setIsState((previousState) => !previousState);
   return (
-    <View style={styles.container}>
+    <TouchableOpacity activeOpacity={0} style={styles.container} onPress={onPress}>
       {children}
       <View style={styles.row}>
-        <Text style={styles.label} onPress={onPress}>{label}</Text>
+        <Text style={styles.label}>{label}</Text>
         {saklar && (
         <Switch
           trackColor={{ false: Colors.TintSecondary, true: Colors.Background }}
@@ -25,7 +26,7 @@ const ListSetting = ({
         />
         )}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

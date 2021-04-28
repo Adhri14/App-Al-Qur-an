@@ -17,9 +17,14 @@ const Home = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const { surah } = useSelector((state) => state.homeReducer);
+  const [dataDb, setDataDb] = useState({
+    name: '',
+  });
   useEffect(() => {
     setLoading(true);
-    getData('surah').then((res) => res);
+    getData('user').then((res) => {
+      setDataDb(res);
+    });
     dispatch(getDataSurah());
   });
 
@@ -35,7 +40,9 @@ const Home = ({ navigation }) => {
         <Gap height={30} />
         <View style={styles.info}>
           <IlLighting style={styles.illustration} />
-          <Text style={styles.date}>Adhri adly</Text>
+          <Text style={styles.date}>
+            {dataDb.name ? dataDb.name : 'Unknown'}
+          </Text>
           <View style={styles.row}>
             <Text style={styles.city}>Waktu anda masuk Jam : </Text>
             <Text style={styles.time}>{location}</Text>

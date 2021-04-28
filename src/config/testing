@@ -1,7 +1,6 @@
-apiKey: "AIzaSyBu-SLXMaLKRorjtaG_EH5VheAUA_x7ddw",
-    authDomain: "db-name-myquran.firebaseapp.com",
-    projectId: "db-name-myquran",
-    storageBucket: "db-name-myquran.appspot.com",
-    messagingSenderId: "843570819978",
-    appId: "1:843570819978:web:617548c4def43b394ece73",
-    measurementId: "G-DZ8HF6CT21"
+apiKey: "AIzaSyBInHENBelsqiux1T-PY8RDzX4gBkR6VvE",
+    authDomain: "db-quran.firebaseapp.com",
+    projectId: "db-quran",
+    storageBucket: "db-quran.appspot.com",
+    messagingSenderId: "201337146415",
+    appId: "1:201337146415:web:62999d2c1d805a85f64ada"
