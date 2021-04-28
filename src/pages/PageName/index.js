@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import {
   ImageBackground, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View,

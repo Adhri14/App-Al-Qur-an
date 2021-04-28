@@ -39,14 +39,7 @@ const Setting = () => (
           <IcRate />
         </ListSetting>
         <Gap height={20} />
-      </View>
-      <Gap height={50} />
-      <View style={styles.content}>
-        <Text style={styles.title}>Tema</Text>
-        <ListSetting label="Dark Mode" saklar>
-          <IcMonth />
-        </ListSetting>
-        <Gap height={20} />
+        <View style={styles.line} />
       </View>
     </View>
   </View>

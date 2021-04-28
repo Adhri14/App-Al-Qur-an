@@ -5,41 +5,23 @@ import React, { useEffect, useState } from 'react';
 import {
   ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
-import Axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 import { IcSearch, IlLighting } from '../../assets';
 import { Gap, HeaderTitle } from '../../components/atoms';
-import { Surah } from '../../components/molecules';
-import { Colors, Fonts } from '../../utils';
-import { API_DATE, API_SURAH, location } from '../../config';
+import { Skeleton, Surah } from '../../components/molecules';
+import { location } from '../../config';
+import { getDataSurah } from '../../redux/action';
+import { Colors, Fonts, getData } from '../../utils';
 
 const Home = ({ navigation }) => {
-  const [date, setDate] = useState('');
-  const [surah, setSurah] = useState([]);
-
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const { surah } = useSelector((state) => state.homeReducer);
   useEffect(() => {
-    getData();
-    getDate();
-  }, []);
-
-  const getData = () => {
-    // call API surah
-    Axios.get(`${API_SURAH}`)
-      .then((res) => {
-        setSurah(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const getDate = () => {
-    // Call API Date
-    Axios.get('http://api.aladhan.com/v1/hToG')
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => err.data);
-  };
+    setLoading(true);
+    getData('surah').then((res) => res);
+    dispatch(getDataSurah());
+  });
 
   return (
     <View style={styles.page}>
@@ -62,22 +44,30 @@ const Home = ({ navigation }) => {
         <Gap height={30} />
         <View style={styles.row}>
           <Text style={styles.surah}>Surah</Text>
-          <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Search')}>
+          <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Search', { surah })}>
             <IcSearch />
           </TouchableOpacity>
         </View>
         <Gap height={30} />
         <View style={styles.listSurah}>
-          {surah.map((surat) => (
-            <Surah
-              key={surat.nomor}
-              arab={surat.asma}
-              number={surat.nomor}
-              title={surat.nama}
-              subtitle={surat.arti}
-              onPress={() => navigation.navigate('DetailSurah', surat)}
-            />
-          ))}
+          {(!loading || surah.length === 0) && (
+            <Skeleton type="loading-surah" />
+          )}
+          {loading && (
+            <>
+              {surah.map((item) => (
+                <Surah
+                  key={item.nomor}
+                  number={item.nomor}
+                  title={item.nama}
+                  subtitle={item.arti}
+                  arab={item.asma}
+                  onPress={() => navigation.navigate('DetailSurah', item)}
+                />
+              ))}
+            </>
+          )}
+
         </View>
       </ScrollView>
     </View>
@@ -138,7 +128,7 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.Semibold,
     fontSize: 35,
     color: Colors.Other,
-    marginRight: 18,
+    marginRight: 10,
   },
   surah: {
     marginLeft: 30,
@@ -148,5 +138,8 @@ const styles = StyleSheet.create({
   },
   btn: {
     marginRight: 30,
+  },
+  listSurah: {
+    flex: 1,
   },
 });

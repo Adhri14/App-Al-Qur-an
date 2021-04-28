@@ -1,23 +1,33 @@
-import React, { useState } from 'react';
+/* eslint-disable max-len */
+/* eslint-disable react/jsx-filename-extension */
+import React, { useEffect, useState } from 'react';
 import {
   ScrollView, StatusBar, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View,
 } from 'react-native';
+import Axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 import { IcBackOff, IcBackOn, IcSearch } from '../../assets';
-import { Surah } from '../../components';
-import { Gap } from '../../components/atoms';
+import { Skeleton, Surah } from '../../components';
+import { ButtonBack, Gap } from '../../components/atoms';
 import { Colors, Fonts } from '../../utils';
+import { API_SURAH } from '../../config';
+import { getDataSurah } from '../../redux/action';
 
-const Search = ({ navigation }) => {
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+const Search = ({ navigation, route }) => {
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const { surah } = useSelector((state) => state.homeReducer);
+  useEffect(() => {
+    setLoading(true);
+    dispatch(getDataSurah());
+  });
+
   return (
     <View style={styles.page}>
       <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
       <ScrollView>
         <View style={styles.header}>
-          <TouchableOpacity style={styles.btn} onPress={() => navigation.goBack()}>
-            <IcBackOff />
-          </TouchableOpacity>
+          <ButtonBack onPress={() => navigation.goBack()} icon backgroundColor={Colors.BackgroundSecondary} />
           <Text style={styles.title}>Cari Surah</Text>
         </View>
         <Gap height={20} />
@@ -27,18 +37,16 @@ const Search = ({ navigation }) => {
         </View>
         <Gap height={30} />
         <View style={styles.listSurah}>
-          <Surah number={1} title="Al-Fatihah" subtitle="Pembukaan" arab="Al Fatihah" />
-          <Surah number={2} title="Al-Baqarah" subtitle="Sapi Betina" arab="Al Baqarah" />
-          <Surah number={3} title="Ali Imron" subtitle="Keluarga Imron" arab="Ali Imron" />
-          <Surah number={4} title="An-Nisaa" subtitle="Wanita" arab="An Nisaa" />
-          <Surah number={5} title="Al-Ma’idah" subtitle="Hidangan" arab="Al Ma’idah" />
-          <Surah number={6} title="Al-An’am" subtitle="Binatang Ternak" arab="Al An’am" />
-          <Surah number={7} title="Al-A’raf" subtitle="Tempat Tertinggi" arab="Al A’raf" />
-          <Surah number={8} title="Al-Anfal" subtitle="Harta Rampasan Perang" arab="Al Anfal" />
-          <Surah number={9} title="At-Taubah" subtitle="Pengampunan" arab="At Taubah" />
-          <Surah number={10} title="Yunus" subtitle="Yunus" arab="Yunus" />
-          <Surah number={11} title="Hud" subtitle="Hud" arab="Hud" />
-          <Surah number={12} title="Yusuf" subtitle="Yusuf" arab="Yusuf" />
+          {(!loading || surah.length === 0) && (
+            <Skeleton type="loading-surah" />
+          )}
+          {loading && (
+            <>
+              {surah.map((item) => (
+                <Surah key={item.nomor} number={item.nomor} title={item.nama} subtitle={item.arti} arab={item.asma} onPress={() => navigation.navigate('DetailSurah', item)} />
+              ))}
+            </>
+          )}
         </View>
       </ScrollView>
     </View>
@@ -58,15 +66,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 30,
   },
-  btn: {
-    backgroundColor: Colors.Background,
-    width: 50,
-    height: 50,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 20,
-  },
   title: {
     fontFamily: Fonts.Semibold,
     fontSize: 22,
@@ -78,7 +77,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 30,
     paddingHorizontal: 20,
-    backgroundColor: Colors.Background,
+    backgroundColor: Colors.BackgroundSecondary,
     borderRadius: 10,
   },
   txt: {

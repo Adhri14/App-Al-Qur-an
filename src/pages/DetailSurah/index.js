@@ -9,23 +9,26 @@ import {
   StatusBar, StyleSheet, Text, View, ScrollView,
 } from 'react-native';
 import Axios from 'axios';
-import { ButtonBack, ListAyat } from '../../components';
-import { Colors, Fonts } from '../../utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { ButtonBack, ListAyat, Skeleton } from '../../components';
+import { Colors, Fonts, getData } from '../../utils';
+import { API_AYAT } from '../../config';
+import { getDataAyat } from '../../redux/action/detail';
 
 const DetailSurah = ({ navigation, route }) => {
-  const [data, setData] = useState([]);
-  const { nama, arti, ayat } = route.params;
-  useEffect(() => {
-    getData();
-  }, []);
+  const [loading, setLoading] = useState(false);
+  const {
+    nama, arti, ayat, nomor,
+  } = route.params;
 
-  const getData = () => {
-    Axios.get('https://api.npoint.io/99c279bb173a6e28359c/surat/1')
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((err) => console.log(err.data));
-  };
+  const dispatch = useDispatch();
+  const { data } = useSelector((state) => state.detailReducer);
+
+  useEffect(() => {
+    setLoading(true);
+    getData('ayat').then((res) => res);
+    dispatch(getDataAyat(nomor));
+  }, []);
 
   return (
     <View style={styles.page}>
@@ -39,9 +42,16 @@ const DetailSurah = ({ navigation, route }) => {
           </View>
         </View>
         <View style={styles.body}>
-          {data.map((ayat) => (
-            <ListAyat key={ayat.nomor} number={ayat.nomor} title={ayat.id} arab={ayat.ar} />
-          ))}
+          {(!loading || data.length === 0) && (
+            <Skeleton type="loading-ayat" />
+          )}
+          {loading && (
+            <>
+              {data.map((item) => (
+                <ListAyat key={item.nomor} number={item.nomor} title={item.id} arab={item.ar} />
+              ))}
+            </>
+          )}
         </View>
       </ScrollView>
     </View>

@@ -76,7 +76,6 @@ const styles = StyleSheet.create({
     color: Colors.TintSecondary,
   },
   arab: {
-    fontFamily: Fonts.Regular,
     fontSize: 35,
     color: Colors.PrimaryColor,
     textAlign: 'right',
