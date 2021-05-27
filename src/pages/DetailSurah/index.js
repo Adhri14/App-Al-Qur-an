@@ -1,19 +1,18 @@
+/* eslint-disable max-len */
 /* eslint-disable arrow-body-style */
 /* eslint-disable react/jsx-filename-extension */
 // /* eslint-disable no-unused-vars */
 // /* eslint-disable linebreak-style */
 // /* eslint-disable no-use-before-define */
 // /* eslint-disable react/jsx-filename-extension */
+import Axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import {
-  StatusBar, StyleSheet, Text, View, ScrollView,
+  ScrollView, StatusBar, StyleSheet, Text, View,
 } from 'react-native';
-import Axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
 import { ButtonBack, ListAyat, Skeleton } from '../../components';
-import { Colors, Fonts, getData } from '../../utils';
 import { API_AYAT } from '../../config';
-import { getDataAyat } from '../../redux/action/detail';
+import { Colors, Fonts } from '../../utils';
 
 const DetailSurah = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
@@ -21,13 +20,26 @@ const DetailSurah = ({ navigation, route }) => {
     nama, arti, ayat, nomor,
   } = route.params;
 
-  const dispatch = useDispatch();
-  const { data } = useSelector((state) => state.detailReducer);
+  const [ayats, setAyat] = useState([]);
+
+  // const dispatch = useDispatch();
+  // const { data } = useSelector((state) => state.detailReducer);
 
   useEffect(() => {
-    setLoading(true);
-    dispatch(getDataAyat(nomor));
+    getAyat();
+    // dispatch(getAyat(nomor));
   }, []);
+
+  const getAyat = () => {
+    Axios.get(`${API_AYAT(nomor)}`)
+      .then((res) => {
+        setLoading(true);
+        setAyat(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <View style={styles.page}>
@@ -41,12 +53,12 @@ const DetailSurah = ({ navigation, route }) => {
           </View>
         </View>
         <View style={styles.body}>
-          {(!loading || data.length === 0) && (
+          {(!loading || ayats.length === 0) && (
             <Skeleton type="loading-ayat" />
           )}
           {loading && (
             <>
-              {data.map((item) => (
+              {ayats.map((item) => (
                 <ListAyat key={item.nomor} number={item.nomor} title={item.id} arab={item.ar} />
               ))}
             </>

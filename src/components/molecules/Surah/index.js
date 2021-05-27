@@ -3,7 +3,7 @@
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import {
-  ImageBackground, StyleSheet, Text, TouchableOpacity, View,
+  StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
 import { IcStar } from '../../../assets';
 import { Colors, Fonts } from '../../../utils';
@@ -19,7 +19,7 @@ const Surah = ({
         <Text style={styles.textNum}>{number}</Text>
       </View>
       <View style={styles.row}>
-        <View>
+        <View style={styles.wrapper}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.subtitle}>{subtitle}</Text>
         </View>
@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 20,
   },
   textNum: {
     fontFamily: Fonts.Medium,
@@ -55,6 +54,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignSelf: 'center',
     top: 10,
+  },
+  wrapper: {
+    marginLeft: 20,
   },
   row: {
     flexDirection: 'row',

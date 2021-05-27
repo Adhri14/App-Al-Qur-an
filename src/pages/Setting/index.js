@@ -36,7 +36,7 @@ const Setting = ({ navigation }) => (
         </ListSetting>
         <Gap height={20} />
         <View style={styles.line} />
-        <ListSetting label="Tentang">
+        <ListSetting label="Tentang" onPress={() => navigation.navigate('About')}>
           <IcInfo />
         </ListSetting>
         <Gap height={20} />

@@ -2,6 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
+  About,
   DetailSurah, Home, PageName, Play, Search, Setting, SplashScreen, UpdateName,
 } from '../pages';
 import { BottomTab } from '../components';
@@ -25,6 +26,7 @@ const Route = () => (
     <Stack.Screen name="Search" component={Search} options={{ headerShown: false }} />
     <Stack.Screen name="DetailSurah" component={DetailSurah} options={{ headerShown: false }} />
     <Stack.Screen name="UpdateName" component={UpdateName} options={{ headerShown: false }} />
+    <Stack.Screen name="About" component={About} options={{ headerShown: false }} />
   </Stack.Navigator>
 );
 

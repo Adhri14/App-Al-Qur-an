@@ -1,26 +1,52 @@
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-filename-extension */
+import Axios from 'axios';
+import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import {
-  ScrollView, StatusBar, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View,
+  ScrollView, StatusBar, StyleSheet, Text, TextInput, View,
 } from 'react-native';
-import Axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { IcBackOff, IcBackOn, IcSearch } from '../../assets';
+import { IcSearch } from '../../assets';
 import { Skeleton, Surah } from '../../components';
 import { ButtonBack, Gap } from '../../components/atoms';
+import { API_SURAH, contains } from '../../config';
 import { Colors, Fonts } from '../../utils';
-import { API_SURAH } from '../../config';
-import { getDataSurah } from '../../redux/action';
 
-const Search = ({ navigation, route }) => {
+const Search = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
-  const { surah } = useSelector((state) => state.homeReducer);
+  const [surah, setSurah] = useState([]);
+  const [data, setData] = useState([]);
+  const [search, setSearch] = useState('');
+
   useEffect(() => {
-    setLoading(true);
-    dispatch(getDataSurah());
-  });
+    getDataSurah();
+  }, []);
+
+  const getDataSurah = () => {
+    Axios.get(`${API_SURAH}`)
+      .then((res) => {
+        setLoading(true);
+        setSurah(res.data);
+        setData(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const searchSurah = (itemSurah) => {
+    if (itemSurah) {
+      const newData = data.filter((item) => {
+        const itemData = item.nama ? item.nama.toLowerCase() : ''.toLowerCase();
+        const text = itemSurah.toLowerCase();
+
+        return itemData.indexOf(text) > -1;
+      });
+      setSurah(newData);
+      setSearch(itemSurah);
+    } else {
+      setSurah(data);
+      setSearch(itemSurah);
+    }
+  };
 
   return (
     <View style={styles.page}>
@@ -32,7 +58,7 @@ const Search = ({ navigation, route }) => {
         </View>
         <Gap height={20} />
         <View style={styles.input}>
-          <TextInput placeholder="Nama Surah" placeholderTextColor={Colors.PrimaryColor} style={styles.txt} />
+          <TextInput placeholder="Nama Surah" placeholderTextColor={Colors.PrimaryColor} style={styles.txt} value={search} onChangeText={(text) => searchSurah(text)} />
           <IcSearch />
         </View>
         <Gap height={30} />

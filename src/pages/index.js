@@ -6,7 +6,8 @@ import Setting from './Setting';
 import Search from './Search';
 import DetailSurah from './DetailSurah';
 import UpdateName from './UpdateName';
+import About from './About';
 
 export {
-  SplashScreen, PageName, Home, Play, Setting, Search, DetailSurah, UpdateName,
+  SplashScreen, PageName, Home, Play, Setting, Search, DetailSurah, UpdateName, About,
 };

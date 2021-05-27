@@ -7,9 +7,9 @@ import Route from './routes';
 
 const App = () => (
   <NavigationContainer>
-    <Provider store={store}>
-      <Route />
-    </Provider>
+    {/* <Provider store={store}> */}
+    <Route />
+    {/* </Provider> */}
   </NavigationContainer>
 );
 

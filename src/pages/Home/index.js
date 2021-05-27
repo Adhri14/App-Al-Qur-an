@@ -1,32 +1,110 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-use-before-define */
 /* eslint-disable react/jsx-filename-extension */
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import Axios from 'axios';
+import Geocoder from 'react-native-geocoding';
+import Geolocation from 'react-native-geolocation-service';
 import { IcSearch, IlLighting } from '../../assets';
 import { Gap, HeaderTitle } from '../../components/atoms';
 import { Skeleton, Surah } from '../../components/molecules';
-import { location } from '../../config';
-import { getDataSurah } from '../../redux/action';
+import { API_DATE, API_SURAH, time } from '../../config';
 import { Colors, Fonts, getData } from '../../utils';
 
 const Home = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
-  const { surah } = useSelector((state) => state.homeReducer);
-  const [dataDb, setDataDb] = useState({
+  const [surah, setSurah] = useState([]);
+  const [data, setData] = useState({
     name: '',
   });
-  useEffect(() => {
-    setLoading(true);
-    getData('user').then((res) => {
-      setDataDb(res);
-    });
-    dispatch(getDataSurah());
+  const [date, setDate] = useState({
+    day: '',
+    month: '',
+    year: '',
   });
+
+  const [location, setLocation] = useState({
+    latitude: null,
+    longitude: null,
+    error: null,
+    address: null,
+  });
+
+  const [dt, setDt] = useState(new Date().toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' }).replace(/(:\d{2}| [AP]M)$/, ''));
+
+  useEffect(() => {
+    // Ambil data location
+    // getDataLocation();
+
+    // Ambil Data User di local storage
+    getData('user').then((res) => {
+      setData(res);
+    });
+
+    // Ambil data surah di API
+    getDataSurah();
+
+    // Ambil data tanggal hijrah dari API
+    getDataDate();
+
+    setInterval(() => {
+      setDt(new Date().toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' }).replace(/(:\d{2}| [AP]M)$/, ''));
+    });
+  }, []);
+
+  const getDataSurah = () => {
+    Axios.get(`${API_SURAH}`)
+      .then((res) => {
+        setLoading(true);
+        setSurah(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const getDataDate = () => {
+    Axios.get(`${API_DATE}`)
+      .then((res) => {
+        setDate({
+          day: res.data.data.hijri.day,
+          month: res.data.data.hijri.month.en,
+          year: res.data.data.hijri.year,
+        });
+      });
+  };
+
+  // const getDataLocation = () => {
+  //   Geolocation.getCurrentPosition(
+  //     (position) => {
+  //       setLocation({
+  //         latitude: position.coords.latitude,
+  //         longitude: position.coords.longitude,
+  //       });
+  //       Geocoder.init('AIzaSyA9lrULTDsjJrF-gZ0gFe-zACV9WgXHmAo');
+  //       Geocoder.from(position.coords.latitude, position.coords.longitude)
+  //         .then((json) => {
+  //           const addressComponent = json.results[0];
+  //           console.log(addressComponent);
+  //           setLocation({
+  //             address: addressComponent,
+  //           });
+  //         })
+  //         .catch((error) => console.log(error));
+  //     },
+  //     (error) => {
+  //       // See error code charts below.
+  //       setLocation({
+  //         error: error.message,
+  //       }),
+  //       console.log(error.code, error.message);
+  //     },
+  //     {
+  //       enableHighAccuracy: false,
+  //       timeout: 10000,
+  //       maximumAge: 100000,
+  //     },
+  //   );
+  // };
 
   return (
     <View style={styles.page}>
@@ -35,17 +113,19 @@ const Home = ({ navigation }) => {
         <HeaderTitle />
         <View style={styles.welcome}>
           <Text style={styles.title}>Assalamualaikum,</Text>
-          {/* <Text style={styles.name}>Adhri adly</Text> */}
+          <Text style={styles.name}>{data.name ? data.name : 'Unknown'}</Text>
         </View>
         <Gap height={30} />
         <View style={styles.info}>
           <IlLighting style={styles.illustration} />
           <Text style={styles.date}>
-            {dataDb.name ? dataDb.name : 'Unknown'}
+            {`${date.day} ${date.month} ${date.year}`}
           </Text>
           <View style={styles.row}>
-            <Text style={styles.city}>Waktu anda masuk Jam : </Text>
-            <Text style={styles.time}>{location}</Text>
+            <Text style={styles.city}>
+              Waktu anda saat ini :
+            </Text>
+            <Text style={styles.time}>{dt}</Text>
           </View>
         </View>
         <Gap height={30} />
@@ -135,7 +215,7 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.Semibold,
     fontSize: 35,
     color: Colors.Other,
-    marginRight: 10,
+    marginRight: 15,
   },
   surah: {
     marginLeft: 30,
