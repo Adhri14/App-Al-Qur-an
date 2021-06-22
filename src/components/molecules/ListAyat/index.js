@@ -11,10 +11,12 @@ import {
 import { IcStar } from '../../../assets';
 import { Colors, Fonts } from '../../../utils';
 import { Gap } from '../../atoms';
+import { useTheme } from '../../atoms/Theme';
 
 const ListAyat = ({
   number, title, subtitle, arab,
 }) => {
+  const { theme } = useTheme();
   return (
     <View>
       <View style={styles.container}>
@@ -29,7 +31,7 @@ const ListAyat = ({
         </View>
       </View>
       <View style={styles.arti}>
-        <Text style={styles.latin}>{title}</Text>
+        <Text style={[styles.latin, { color: theme.textAyat }]}>{title}</Text>
         {/* <Text style={styles.ind}>{title}</Text> */}
       </View>
       <Gap height={1} backgroundColor={Colors.TintSecondary} marginTop={20} borderRadius={5} />
@@ -90,7 +92,6 @@ const styles = StyleSheet.create({
   latin: {
     fontFamily: Fonts.Medium,
     fontSize: 16,
-    color: Colors.TintPrimary,
   },
   ind: {
     fontFamily: Fonts.Medium,

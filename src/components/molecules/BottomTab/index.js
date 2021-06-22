@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Colors } from '../../../utils';
 import Tab from '../../atoms/Tab';
+import { useTheme } from '../../atoms/Theme';
 
 const BottomTab = ({ state, descriptors, navigation }) => {
   const focusedOptions = descriptors[state.routes[state.index].key].options;
@@ -10,8 +11,10 @@ const BottomTab = ({ state, descriptors, navigation }) => {
     return null;
   }
 
+  const { theme } = useTheme();
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.backgroundColorMain }]}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label = options.tabBarLabel !== undefined
@@ -63,6 +66,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 72,
-    backgroundColor: Colors.Other,
   },
 });

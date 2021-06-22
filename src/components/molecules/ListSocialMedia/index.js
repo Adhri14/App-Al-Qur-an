@@ -5,24 +5,28 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { Fonts, Colors } from '../../../utils';
+import { useTheme } from '../../atoms/Theme';
 
 const ListSocialMedia = ({
   color, label, value, icon, onPress,
-}) => (
-  <View style={styles.container}>
-    <Text style={styles.text}>
-      <Icon name={icon} size={16} color={Colors.TintPrimary} />
-      {' '}
-      |
-      {' '}
-      {label}
-      {' '}
-      :
-      {' '}
-      <Text onPress={onPress} style={styles.socialMedia(color)}>{value}</Text>
-    </Text>
-  </View>
-);
+}) => {
+  const { theme } = useTheme();
+  return (
+    <View style={styles.container}>
+      <Text style={[styles.text, { color: theme.textAbout }]}>
+        <Icon name={icon} size={16} color={theme.textAbout} />
+        {' '}
+        |
+        {' '}
+        {label}
+        {' '}
+        :
+        {' '}
+        <Text onPress={onPress} style={styles.socialMedia(color)}>{value}</Text>
+      </Text>
+    </View>
+  );
+};
 
 export default ListSocialMedia;
 
@@ -35,7 +39,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     marginBottom: 8,
-    color: Colors.TintPrimary,
   },
   container: {
     marginLeft: 25,

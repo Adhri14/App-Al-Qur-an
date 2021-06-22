@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-filename-extension */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
@@ -11,6 +11,7 @@ import { Gap, HeaderTitle } from '../../components/atoms';
 import { Skeleton, Surah } from '../../components/molecules';
 import { API_DATE, API_SURAH, time } from '../../config';
 import { Colors, Fonts, getData } from '../../utils';
+import { useTheme } from '../../components/atoms/Theme';
 
 const Home = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
@@ -106,17 +107,19 @@ const Home = ({ navigation }) => {
   //   );
   // };
 
+  const { theme } = useTheme();
+
   return (
-    <View style={styles.page}>
+    <View style={[styles.page, { backgroundColor: theme.backgroundColorMain }]}>
       <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
       <ScrollView showsVerticalScrollIndicator={false}>
         <HeaderTitle />
         <View style={styles.welcome}>
-          <Text style={styles.title}>Assalamualaikum,</Text>
-          <Text style={styles.name}>{data.name ? data.name : 'Unknown'}</Text>
+          <Text style={[styles.title, { color: theme.textSecondary }]}>Assalamualaikum,</Text>
+          <Text style={[styles.name, { color: theme.textPrimary }]}>{data.name ? data.name : 'Unknown'}</Text>
         </View>
         <Gap height={30} />
-        <View style={styles.info}>
+        <View style={[styles.info, { backgroundColor: theme.backgroundColorSecond }]}>
           <IlLighting style={styles.illustration} />
           <Text style={styles.date}>
             {`${date.day} ${date.month} ${date.year}`}
@@ -166,7 +169,6 @@ export default Home;
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-    backgroundColor: Colors.Other,
   },
   welcome: {
     marginTop: 20,
@@ -175,17 +177,14 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: Fonts.Semibold,
     fontSize: 22,
-    color: Colors.PrimaryColor,
   },
   name: {
     fontFamily: Fonts.Semibold,
     fontSize: 22,
-    color: Colors.TintPrimary,
   },
   info: {
     marginHorizontal: 30,
     position: 'relative',
-    backgroundColor: Colors.PrimaryColor,
     borderRadius: 20,
     padding: 20,
     paddingBottom: 6,

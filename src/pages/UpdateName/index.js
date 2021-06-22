@@ -6,7 +6,8 @@ import {
   StyleSheet, Text, TextInput, TouchableOpacity, View,
 } from 'react-native';
 import { ButtonBack, Gap } from '../../components';
-import { Firebase } from '../../config';
+import { useTheme } from '../../components/atoms/Theme';
+import { FirebaseApp } from '../../config';
 import {
   Colors, Fonts, getData, storeData, useForm,
 } from '../../utils';
@@ -25,8 +26,8 @@ const UpdateName = ({ navigation }) => {
       setDataUser(res);
     });
 
-    Firebase.database()
-      .ref(`Biodata/${dataUser.name}`)
+    FirebaseApp.database()
+      .ref(`biodata/${dataUser.name}`)
       .once('value', (res) => {
         const data = res.val() ? res.val() : {};
         const item = { ...data };
@@ -38,7 +39,7 @@ const UpdateName = ({ navigation }) => {
   }, []);
 
   const onSubmit = () => {
-    const biodata = Firebase.database().ref(`Biodata/${dataUser.name}`);
+    const biodata = FirebaseApp.database().ref(`biodata/${dataUser.name}`);
     setForm('reset');
     const data = {
       name: form.name,
@@ -48,16 +49,18 @@ const UpdateName = ({ navigation }) => {
     navigation.replace('MainApp');
   };
 
+  const { theme } = useTheme();
+
   return (
-    <View style={styles.page}>
+    <View style={[styles.page, { backgroundColor: theme.backgroundColorMain }]}>
       <View style={styles.header}>
-        <ButtonBack onPress={() => navigation.goBack()} icon backgroundColor={Colors.BackgroundSecondary} />
+        <ButtonBack onPress={() => navigation.goBack()} icon backgroundColor={theme.backgroundColorInput1} />
         <Text style={styles.title}>Ganti Nama</Text>
       </View>
       <View style={styles.row}>
-        <TextInput placeholder="Masukkan Nama" value={form.name} onChangeText={(text) => setForm('name', text)} style={styles.input} placeholderTextColor={Colors.Other} />
+        <TextInput placeholder="Masukkan Nama" value={form.name} onChangeText={(text) => setForm('name', text)} style={[styles.input, { backgroundColor: theme.backgroundColorInput1 }]} placeholderTextColor={Colors.PrimaryColor} />
         <Gap width={10} />
-        <TouchableOpacity onPress={onSubmit} style={styles.btn}>
+        <TouchableOpacity onPress={onSubmit} style={[styles.btn, { backgroundColor: theme.backgroundColorInput1 }]}>
           <Text style={styles.textBtn}>simpan</Text>
         </TouchableOpacity>
       </View>
@@ -91,23 +94,21 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   input: {
-    backgroundColor: Colors.PrimaryColor,
     flex: 1,
     borderRadius: 10,
     paddingHorizontal: 20,
-    color: Colors.Other,
+    color: Colors.PrimaryColor,
     fontFamily: Fonts.Medium,
     fontSize: 16,
     paddingVertical: 15,
   },
   btn: {
-    backgroundColor: Colors.PrimaryColor,
     paddingHorizontal: 20,
     paddingVertical: 18,
     borderRadius: 10,
   },
   textBtn: {
-    color: Colors.Other,
+    color: Colors.PrimaryColor,
     fontFamily: Fonts.Medium,
     fontSize: 16,
   },

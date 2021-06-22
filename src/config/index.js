@@ -1,6 +1,6 @@
-import Firebase from './Firebase';
+import FirebaseApp from './Firebase';
 
-export { Firebase };
+export { FirebaseApp };
 
 export * from './Time';
 export * from './API';

@@ -8,27 +8,31 @@ import {
 import { IcStar } from '../../../assets';
 import { Colors, Fonts } from '../../../utils';
 import { Gap } from '../../atoms';
+import { useTheme } from '../../atoms/Theme';
 
 const Surah = ({
   number, title, subtitle, arab, onPress,
-}) => (
-  <TouchableOpacity activeOpacity={0.5} onPress={onPress} style={styles.container}>
-    <View style={styles.content}>
-      <View style={styles.number}>
-        <IcStar />
-        <Text style={styles.textNum}>{number}</Text>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.wrapper}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.subtitle}>{subtitle}</Text>
+}) => {
+  const { theme } = useTheme();
+  return (
+    <TouchableOpacity activeOpacity={0.5} onPress={onPress} style={styles.container}>
+      <View style={styles.content}>
+        <View style={styles.number}>
+          <IcStar />
+          <Text style={styles.textNum}>{number}</Text>
         </View>
-        <Text style={styles.arab}>{arab}</Text>
+        <View style={styles.row}>
+          <View style={styles.wrapper}>
+            <Text style={[styles.title, { color: theme.textPrimary }]}>{title}</Text>
+            <Text style={styles.subtitle}>{subtitle}</Text>
+          </View>
+          <Text style={styles.arab}>{arab}</Text>
+        </View>
       </View>
-    </View>
-    <Gap height={1} backgroundColor={Colors.TintSecondary} marginTop={20} borderRadius={5} />
-  </TouchableOpacity>
-);
+      <Gap height={1} backgroundColor={Colors.TintSecondary} marginTop={20} borderRadius={5} />
+    </TouchableOpacity>
+  );
+};
 
 export default Surah;
 
@@ -68,7 +72,6 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: Fonts.Medium,
     fontSize: 16,
-    color: Colors.TintPrimary,
   },
   subtitle: {
     fontFamily: Fonts.Medium,

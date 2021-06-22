@@ -8,7 +8,8 @@ import { Gap } from '../../components/atoms';
 import {
   Colors, Fonts, storeData, useForm,
 } from '../../utils';
-import { Firebase } from '../../config';
+import { FirebaseApp } from '../../config';
+import { useTheme } from '../../components/atoms/Theme';
 
 const PageName = ({ navigation }) => {
   const [form, setForm] = useForm({
@@ -16,7 +17,7 @@ const PageName = ({ navigation }) => {
   });
 
   const onSubmit = () => {
-    const biodata = Firebase.database().ref('Biodata');
+    const biodata = FirebaseApp.database().ref('biodata');
     setForm('reset');
     const data = {
       name: form.name,
@@ -26,22 +27,31 @@ const PageName = ({ navigation }) => {
     navigation.replace('MainApp');
   };
 
+  const { theme } = useTheme();
+
   return (
-    <View style={styles.page}>
+    <View style={[styles.page, { backgroundColor: theme.backgroundColorSecond }]}>
       <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
-      <ImageBackground source={IlBackground} style={styles.background}>
-        <Text style={styles.skip} onPress={onSubmit}>Lewati</Text>
+      <Text style={styles.skip} onPress={onSubmit}>Lewati</Text>
+      <View style={[styles.rounded1, { backgroundColor: theme.colorXlg }]}>
+        <View style={[styles.rounded2, { backgroundColor: theme.colorLg }]}>
+          <View style={[styles.rounded3, { backgroundColor: theme.colorM }]}>
+            <View style={[styles.rounded4, { backgroundColor: theme.colorSm }]} />
+          </View>
+        </View>
+      </View>
+      <View style={styles.container}>
         <View style={styles.content}>
           <Text style={styles.title}>Assalamualaikum,</Text>
           <Text style={styles.subtitle}>Namanya Siapa nih?</Text>
         </View>
         <Gap height={50} />
-        <TextInput placeholder="Masukkan Nama" placeholderTextColor={Colors.Other} style={styles.input} value={form.name} onChangeText={(value) => setForm('name', value)} />
+        <TextInput placeholder="Masukkan Nama" placeholderTextColor={Colors.Other} style={[styles.input, { backgroundColor: theme.backgroundColorInput2 }]} value={form.name} onChangeText={(value) => setForm('name', value)} />
         <Gap height={50} />
-        <TouchableOpacity style={styles.btn} activeOpacity={0.5} onPress={onSubmit}>
+        <TouchableOpacity style={[styles.btn, theme.button]} activeOpacity={0.5} onPress={onSubmit}>
           <Text style={styles.textBtn}>Mulai</Text>
         </TouchableOpacity>
-      </ImageBackground>
+      </View>
     </View>
   );
 };
@@ -51,14 +61,37 @@ export default PageName;
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-    backgroundColor: Colors.PrimaryColor,
-  },
-  background: {
-    flex: 1,
-    width: '100%',
-    position: 'relative',
-    // alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  rounded1: {
+    width: 777,
+    height: 777,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 1000,
+  },
+  rounded2: {
+    width: 639,
+    height: 649,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 1000,
+  },
+  rounded3: {
+    width: 479,
+    height: 479,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 1000,
+  },
+  rounded4: {
+    width: 319,
+    height: 319,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 1000,
   },
   skip: {
     top: 50,
@@ -67,6 +100,14 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.Medium,
     fontSize: 16,
     color: Colors.Other,
+    zIndex: 1,
+  },
+  container: {
+    position: 'absolute',
+    justifyContent: 'flex-start',
+    alignSelf: 'flex-start',
+    // borderWidth: 1,
+    width: '100%',
   },
   title: {
     fontFamily: Fonts.Medium,

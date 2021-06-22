@@ -1,41 +1,37 @@
+/* eslint-disable react/jsx-filename-extension */
 import React, { useEffect } from 'react';
 import {
   Dimensions,
   ImageBackground, StatusBar, StyleSheet, Text, View,
 } from 'react-native';
 import { IlBackground } from '../../assets';
-import { Firebase } from '../../config';
+import { useTheme } from '../../components/atoms/Theme';
+import { FirebaseApp } from '../../config';
 import { Colors, Fonts } from '../../utils';
 
 const SplashScreen = ({ navigation }) => {
   useEffect(() => {
-    const unsubs = Firebase.database().ref('Biodata/').once('value').then((res) => {
+    const unsubs = FirebaseApp.database().ref('biodata/').once('value').then((res) => {
       setTimeout(() => {
-        if (res) {
-          navigation.replace('MainApp');
-        } else {
+        if (!res) {
           navigation.replace('PageName');
+        } else {
+          navigation.replace('MainApp');
         }
       }, 3000);
-
-      clearTimeout(res);
     });
-    return () => unsubs();
-    // setTimeout(() => {
-    //   navigation.replace('MainApp');
-    // }, 3000);
-  }, []);
 
+    return () => unsubs();
+  }, [navigation]);
+
+  const { theme } = useTheme();
   return (
-    <View style={styles.page}>
+    <View style={[styles.page, { backgroundColor: theme.backgroundColorSecond }]}>
       <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
-      {/* <ImageBackground source={IlBackground} style={styles.background}>
-        <Text style={styles.title}>Qur'anKu</Text>
-      </ImageBackground> */}
-      <View style={styles.rounded1}>
-        <View style={styles.rounded2}>
-          <View style={styles.rounded3}>
-            <View style={styles.rounded4}>
+      <View style={[styles.rounded1, { backgroundColor: theme.colorXlg }]}>
+        <View style={[styles.rounded2, { backgroundColor: theme.colorLg }]}>
+          <View style={[styles.rounded3, { backgroundColor: theme.colorM }]}>
+            <View style={[styles.rounded4, { backgroundColor: theme.colorSm }]}>
               <Text style={styles.title}>Qur'anKu</Text>
             </View>
           </View>
@@ -50,7 +46,6 @@ export default SplashScreen;
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-    backgroundColor: Colors.PrimaryColor,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -68,7 +63,6 @@ const styles = StyleSheet.create({
   rounded1: {
     width: 777,
     height: 777,
-    backgroundColor: '#2AD9AF',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 1000,
@@ -76,7 +70,6 @@ const styles = StyleSheet.create({
   rounded2: {
     width: 639,
     height: 649,
-    backgroundColor: '#24D2A9',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 1000,
@@ -84,7 +77,6 @@ const styles = StyleSheet.create({
   rounded3: {
     width: 479,
     height: 479,
-    backgroundColor: '#1DCAA1',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 1000,
@@ -92,7 +84,6 @@ const styles = StyleSheet.create({
   rounded4: {
     width: 319,
     height: 319,
-    backgroundColor: '#1AC69D',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 1000,

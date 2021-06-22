@@ -11,6 +11,7 @@ import {
   ScrollView, StatusBar, StyleSheet, Text, View,
 } from 'react-native';
 import { ButtonBack, ListAyat, Skeleton } from '../../components';
+import { useTheme } from '../../components/atoms/Theme';
 import { API_AYAT } from '../../config';
 import { Colors, Fonts } from '../../utils';
 
@@ -41,18 +42,20 @@ const DetailSurah = ({ navigation, route }) => {
       });
   };
 
+  const { theme } = useTheme();
+
   return (
-    <View style={styles.page}>
+    <View style={[styles.page]}>
       <StatusBar backgroundColor="transparent" translucent />
       <ScrollView>
-        <View style={styles.row}>
-          <ButtonBack backgroundColor={Colors.BackgroundPrimary} onPress={() => navigation.goBack()} />
+        <View style={[styles.row, { backgroundColor: theme.backgroundColorSecond }]}>
+          <ButtonBack backgroundColor={theme.backgroundColorInput3} onPress={() => navigation.goBack()} />
           <View>
             <Text style={styles.title}>{nama}</Text>
             <Text style={styles.subtitle}>{`${arti} . ${ayat} Ayat`}</Text>
           </View>
         </View>
-        <View style={styles.body}>
+        <View style={[styles.body, , { backgroundColor: theme.backgroundColorMain }]}>
           {(!loading || ayats.length === 0) && (
             <Skeleton type="loading-ayat" />
           )}
@@ -77,7 +80,6 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
-    backgroundColor: Colors.Other,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
     marginTop: -50,
@@ -86,7 +88,6 @@ const styles = StyleSheet.create({
   },
   row: {
     height: 200,
-    backgroundColor: Colors.PrimaryColor,
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',

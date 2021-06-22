@@ -9,6 +9,7 @@ import {
 import { IcSearch } from '../../assets';
 import { Skeleton, Surah } from '../../components';
 import { ButtonBack, Gap } from '../../components/atoms';
+import { useTheme } from '../../components/atoms/Theme';
 import { API_SURAH, contains } from '../../config';
 import { Colors, Fonts } from '../../utils';
 
@@ -48,16 +49,18 @@ const Search = ({ navigation }) => {
     }
   };
 
+  const { theme } = useTheme();
+
   return (
     <View style={styles.page}>
       <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
       <ScrollView>
         <View style={styles.header}>
-          <ButtonBack onPress={() => navigation.goBack()} icon backgroundColor={Colors.BackgroundSecondary} />
+          <ButtonBack onPress={() => navigation.goBack()} icon backgroundColor={theme.backgroundColorInput1} />
           <Text style={styles.title}>Cari Surah</Text>
         </View>
         <Gap height={20} />
-        <View style={styles.input}>
+        <View style={[styles.input, { backgroundColor: theme.backgroundColorInput1 }]}>
           <TextInput placeholder="Nama Surah" placeholderTextColor={Colors.PrimaryColor} style={styles.txt} value={search} onChangeText={(text) => searchSurah(text)} />
           <IcSearch />
         </View>
@@ -103,7 +106,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 30,
     paddingHorizontal: 20,
-    backgroundColor: Colors.BackgroundSecondary,
     borderRadius: 10,
   },
   txt: {

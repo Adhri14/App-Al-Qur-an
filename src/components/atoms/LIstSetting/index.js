@@ -1,25 +1,28 @@
 /* eslint-disable react/jsx-filename-extension */
-import { useTheme } from '@react-navigation/native';
 import React, { Children, useContext, useState } from 'react';
 import {
   StyleSheet, Switch, Text, TouchableOpacity, View,
 } from 'react-native';
 import { IcEdit } from '../../../assets';
 import { Colors, Fonts } from '../../../utils';
+import { useTheme } from '../Theme';
 
 const ListSetting = ({
   label, children, saklar, onPress,
 }) => {
   const [isState, setIsState] = useState(false);
   const toggleSwitch = () => setIsState((previousState) => !previousState);
+
+  const { theme } = useTheme();
+
   return (
-    <TouchableOpacity activeOpacity={0} style={styles.container} onPress={onPress}>
+    <TouchableOpacity activeOpacity={0.9} style={styles.container} onPress={onPress}>
       {children}
       <View style={styles.row}>
-        <Text style={styles.label}>{label}</Text>
+        <Text style={[styles.label, { color: theme.textSetting }]}>{label}</Text>
         {saklar && (
         <Switch
-          trackColor={{ false: Colors.TintSecondary, true: Colors.Background }}
+          trackColor={{ false: Colors.TintSecondary, true: Colors.BackgroundSecondary }}
           thumbColor={isState ? Colors.PrimaryColor : Colors.Other}
           onValueChange={toggleSwitch}
           value={isState}
@@ -42,9 +45,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     fontFamily: Fonts.Regular,
     fontSize: 16,
-    color: Colors.TintPrimary,
     marginTop: 5,
-    opacity: 0.7,
   },
   row: {
     flexDirection: 'row',

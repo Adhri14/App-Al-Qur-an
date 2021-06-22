@@ -4,57 +4,47 @@ import {
 } from 'react-native';
 import { IcBackOn, IlBackground, IlMessage } from '../../assets';
 import { Gap } from '../../components/atoms';
+import { useTheme } from '../../components/atoms/Theme';
 import { Colors, Fonts } from '../../utils';
 
-const Play = ({ navigation }) => (
-  <View style={styles.page}>
-    <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
-    <TouchableOpacity style={styles.btn} onPress={() => navigation.goBack()}>
-      <IcBackOn />
-    </TouchableOpacity>
-    {/* <ImageBackground source={IlBackground} style={styles.background}>
-      <TouchableOpacity style={styles.btn} onPress={() => navigation.goBack()}>
+const Play = ({ navigation }) => {
+  const { theme } = useTheme();
+  return (
+    <View style={[styles.page, { backgroundColor: theme.backgroundColorSecond }]}>
+      <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
+      <TouchableOpacity style={[styles.btn, { backgroundColor: theme.backgroundColorInput3 }]} onPress={() => navigation.goBack()}>
         <IcBackOn />
       </TouchableOpacity>
-      <Text style={styles.title}>Mohon Maaf!</Text>
-      <Gap height={20} />
-      <Text style={styles.subtitle}>Halaman ini masih dalam tahap</Text>
-      <Text style={styles.subtitle}>Pengembangan</Text>
-      <View style={styles.img}>
-        <Image source={IlMessage} style={styles.thumb} />
-      </View>
-    </ImageBackground> */}
-    <View style={styles.rounded1}>
-      <View style={styles.rounded2}>
-        <View style={styles.rounded3}>
-          <View style={styles.rounded4}>
-            <Text style={styles.title}>Mohon Maaf!</Text>
-            <Gap height={20} />
-            <Text style={styles.subtitle}>Halaman ini masih dalam tahap</Text>
-            <Text style={styles.subtitle}>Pengembangan</Text>
+      <View style={[styles.rounded1, { backgroundColor: theme.colorXlg }]}>
+        <View style={[styles.rounded2, { backgroundColor: theme.colorLg }]}>
+          <View style={[styles.rounded3, { backgroundColor: theme.colorM }]}>
+            <View style={[styles.rounded4, { backgroundColor: theme.colorSm }]}>
+              <Text style={styles.title}>Mohon Maaf!</Text>
+              <Gap height={20} />
+              <Text style={styles.subtitle}>Halaman ini masih dalam tahap</Text>
+              <Text style={styles.subtitle}>Pengembangan</Text>
+            </View>
           </View>
         </View>
       </View>
+      <View style={styles.img}>
+        <Image source={IlMessage} style={styles.thumb} />
+      </View>
     </View>
-    <View style={styles.img}>
-      <Image source={IlMessage} style={styles.thumb} />
-    </View>
-  </View>
-);
+  );
+};
 
 export default Play;
 
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-    backgroundColor: Colors.PrimaryColor,
     justifyContent: 'center',
     alignItems: 'center',
   },
   rounded1: {
     width: 777,
     height: 777,
-    backgroundColor: '#2AD9AF',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 1000,
@@ -62,7 +52,6 @@ const styles = StyleSheet.create({
   rounded2: {
     width: 639,
     height: 649,
-    backgroundColor: '#24D2A9',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 1000,
@@ -70,7 +59,6 @@ const styles = StyleSheet.create({
   rounded3: {
     width: 479,
     height: 479,
-    backgroundColor: '#1DCAA1',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 1000,
@@ -78,7 +66,6 @@ const styles = StyleSheet.create({
   rounded4: {
     width: 319,
     height: 319,
-    backgroundColor: '#1AC69D',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 1000,
@@ -94,7 +81,6 @@ const styles = StyleSheet.create({
     color: Colors.Other,
   },
   btn: {
-    backgroundColor: '#20D2A7',
     width: 50,
     height: 50,
     borderRadius: 10,

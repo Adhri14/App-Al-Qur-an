@@ -1,14 +1,15 @@
 import firebase from 'firebase';
 
 firebase.initializeApp({
-  apiKey: 'AIzaSyBInHENBelsqiux1T-PY8RDzX4gBkR6VvE',
-  authDomain: 'db-quran.firebaseapp.com',
-  projectId: 'db-quran',
-  storageBucket: 'db-quran.appspot.com',
-  messagingSenderId: '201337146415',
-  appId: '1:201337146415:web:62999d2c1d805a85f64ada',
+  apiKey: 'AIzaSyDQ80-6Eg7RJg7AP_ndngjhprIkD9SOBcA',
+  authDomain: 'app-qur-anku.firebaseapp.com',
+  projectId: 'app-qur-anku',
+  storageBucket: 'app-qur-anku.appspot.com',
+  messagingSenderId: '888830078605',
+  appId: '1:888830078605:web:491855feba40b41e01bcc4',
+  measurementId: 'G-2KD75ZBMVV',
 });
 
-const Firebase = firebase;
+const FirebaseApp = firebase;
 
-export default Firebase;
+export default FirebaseApp;
