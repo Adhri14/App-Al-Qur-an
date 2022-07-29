@@ -1,17 +1,22 @@
 /* eslint-disable react/jsx-filename-extension */
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
-  ImageBackground, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View,
+  ImageBackground,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { IlBackground } from '../../assets';
-import { Gap } from '../../components/atoms';
-import {
-  Colors, Fonts, storeData, useForm,
-} from '../../utils';
-import { FirebaseApp } from '../../config';
-import { useTheme } from '../../components/atoms/Theme';
+import {IlBackground} from '../../assets';
+import {Gap} from '../../components/atoms';
+import {Colors, Fonts, storeData, useForm} from '../../utils';
+import {FirebaseApp} from '../../config';
+import {useTheme} from '../../components/atoms/Theme';
+import ThemeWrapper from '../../components/molecules/ThemeWrapper';
 
-const PageName = ({ navigation }) => {
+const PageName = ({navigation}) => {
   const [form, setForm] = useForm({
     name: '',
   });
@@ -27,32 +32,55 @@ const PageName = ({ navigation }) => {
     navigation.replace('MainApp');
   };
 
-  const { theme } = useTheme();
+  const {theme} = useTheme();
 
   return (
-    <View style={[styles.page, { backgroundColor: theme.backgroundColorSecond }]}>
-      <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
-      <Text style={styles.skip} onPress={onSubmit}>Lewati</Text>
-      <View style={[styles.rounded1, { backgroundColor: theme.colorXlg }]}>
-        <View style={[styles.rounded2, { backgroundColor: theme.colorLg }]}>
-          <View style={[styles.rounded3, { backgroundColor: theme.colorM }]}>
-            <View style={[styles.rounded4, { backgroundColor: theme.colorSm }]} />
+    <ThemeWrapper>
+      <View
+        style={[styles.page, {backgroundColor: theme.backgroundColorSecond}]}>
+        <StatusBar
+          translucent
+          backgroundColor="transparent"
+          barStyle="dark-content"
+        />
+        <Text style={styles.skip} onPress={onSubmit}>
+          Lewati
+        </Text>
+        <View style={[styles.rounded1, {backgroundColor: theme.colorXlg}]}>
+          <View style={[styles.rounded2, {backgroundColor: theme.colorLg}]}>
+            <View style={[styles.rounded3, {backgroundColor: theme.colorM}]}>
+              <View
+                style={[styles.rounded4, {backgroundColor: theme.colorSm}]}
+              />
+            </View>
           </View>
         </View>
-      </View>
-      <View style={styles.container}>
-        <View style={styles.content}>
-          <Text style={styles.title}>Assalamualaikum,</Text>
-          <Text style={styles.subtitle}>Namanya Siapa nih?</Text>
+        <View style={styles.container}>
+          <View style={styles.content}>
+            <Text style={styles.title}>Assalamualaikum,</Text>
+            <Text style={styles.subtitle}>Namanya Siapa nih?</Text>
+          </View>
+          <Gap height={50} />
+          <TextInput
+            placeholder="Masukkan Nama"
+            placeholderTextColor={Colors.Other}
+            style={[
+              styles.input,
+              {backgroundColor: theme.backgroundColorInput2},
+            ]}
+            value={form.name}
+            onChangeText={value => setForm('name', value)}
+          />
+          <Gap height={50} />
+          <TouchableOpacity
+            style={[styles.btn, theme.button]}
+            activeOpacity={0.5}
+            onPress={onSubmit}>
+            <Text style={styles.textBtn}>Mulai</Text>
+          </TouchableOpacity>
         </View>
-        <Gap height={50} />
-        <TextInput placeholder="Masukkan Nama" placeholderTextColor={Colors.Other} style={[styles.input, { backgroundColor: theme.backgroundColorInput2 }]} value={form.name} onChangeText={(value) => setForm('name', value)} />
-        <Gap height={50} />
-        <TouchableOpacity style={[styles.btn, theme.button]} activeOpacity={0.5} onPress={onSubmit}>
-          <Text style={styles.textBtn}>Mulai</Text>
-        </TouchableOpacity>
       </View>
-    </View>
+    </ThemeWrapper>
   );
 };
 

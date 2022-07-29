@@ -1,14 +1,36 @@
 /* eslint-disable react/jsx-filename-extension */
-import React, { createContext, useContext, useState } from 'react';
-import { View, Text } from 'react-native';
-import { darkTheme, defaultTheme } from '../../../utils';
+import React, {createContext, useContext, useState, useEffect} from 'react';
+import {View, Text} from 'react-native';
+import {darkTheme, defaultTheme, getData, storeData} from '../../../utils';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ThemeContext = createContext();
 
-const Theme = ({ children }) => {
+const Theme = ({children}) => {
   const [theme, setTheme] = useState(defaultTheme);
+  const [isLoading, setIsLoading] = useState(true);
+  const findOldTheme = async () => {
+    const themeMode = await getData('theme');
+    if (themeMode !== null) {
+      themeMode === 'default' ? setTheme(defaultTheme) : setTheme(darkTheme);
+      setIsLoading(false);
+    }
+    setIsLoading(false);
+  };
+
+  const updateTheme = currentTheme => {
+    const newTheme = currentTheme === 'default' ? defaultTheme : darkTheme;
+    // console.log('mode : ', newTheme);
+    setTheme(newTheme);
+    storeData('theme', currentTheme);
+  };
+
+  useEffect(() => {
+    findOldTheme();
+  }, []);
+
   return (
-    <ThemeContext.Provider value={{ theme }}>
+    <ThemeContext.Provider value={{theme, isLoading, updateTheme}}>
       {children}
     </ThemeContext.Provider>
   );

@@ -1,66 +1,190 @@
 /* eslint-disable react/jsx-filename-extension */
-import React, { useContext } from 'react';
+import React, {useContext} from 'react';
+import {useState} from 'react';
 import {
-  StatusBar, StyleSheet, Switch, Text, View,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Switch,
+  Text,
+  View,
 } from 'react-native';
-import {
-  IcEdit, IcInfo, IcMessage, IcMonth, IcRate,
-} from '../../assets';
-import { Gap, HeaderTitle, ListSetting } from '../../components';
-import { useTheme } from '../../components/atoms/Theme';
-import { Colors, Fonts } from '../../utils';
+import Svg, {ClipPath, Defs, G, Mask, Path, Rect} from 'react-native-svg';
+import {IcEdit, IcInfo, IcMessage, IcMonth, IcRate} from '../../assets';
+import {Gap, HeaderTitle, ListSetting} from '../../components';
+import {useTheme} from '../../components/atoms/Theme';
+import ThemeWrapper from '../../components/molecules/ThemeWrapper';
+import {Colors, Fonts, storeData} from '../../utils';
 
-const Setting = ({ navigation }) => {
-  const { theme } = useTheme();
+const Setting = ({navigation}) => {
+  const {theme, updateTheme} = useTheme();
+  const [select, setSelect] = useState(false);
+  // const changeTheme = (value) => {
+
+  // }
+  const onValueChange = () => {
+    if (select) {
+      // storeData('theme', {theme: 'dark'});
+      updateTheme('default');
+    } else {
+      // storeData('theme', {theme: 'default'});
+      updateTheme('dark');
+    }
+    setSelect(!select);
+  };
+
   return (
-    <View style={[styles.page, { backgroundColor: theme.backgroundColorMain }]}>
-      <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
-      <HeaderTitle />
-      <Gap height={50} />
-      <View style={styles.container}>
-        <View style={styles.content}>
-          <Text style={[styles.title, { color: theme.textSetting2 }]}>Pengguna</Text>
-          <ListSetting label="Ganti Nama" onPress={() => navigation.navigate('UpdateName')}>
-            <IcEdit style={{ color: theme.textSetting }} color={theme.textSetting} />
-          </ListSetting>
-          <Gap height={20} />
-          <View style={styles.line} />
-        </View>
+    <ThemeWrapper>
+      <View style={[styles.page, {backgroundColor: theme.backgroundColorMain}]}>
+        <StatusBar
+          translucent
+          backgroundColor="transparent"
+          barStyle="dark-content"
+        />
+        <HeaderTitle />
         <Gap height={50} />
-        <View style={styles.content}>
-          <Text style={[styles.title, { color: theme.textSetting2 }]}>Aplikasi</Text>
-          <ListSetting label="Saran dan Masukkan">
-            <IcMessage color={theme.textSetting} />
-          </ListSetting>
-          <Gap height={20} />
-          <View style={styles.line} />
-          <ListSetting label="Beri Rating">
-            <IcRate color={theme.textSetting} />
-          </ListSetting>
-          <Gap height={20} />
-          <View style={styles.line} />
-          <ListSetting label="Tentang" onPress={() => navigation.navigate('About')}>
-            <IcInfo color={theme.textSetting} />
-          </ListSetting>
-          <Gap height={20} />
-          <View style={styles.line} />
-        </View>
-        <Gap height={50} />
-        {/* <View style={styles.content}>
-          <Text style={[styles.title, { color: theme.textSetting2 }]}>Tema</Text>
-          <View style={styles.row}>
-            <ListSetting label="Dark Mode" saklar>
-              <IcMonth color={theme.textSetting} />
-            </ListSetting>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{flexGrow: 1}}>
+          <View style={styles.container}>
+            <View style={styles.content}>
+              <Text style={[styles.title, {color: theme.textSetting2}]}>
+                Pengguna
+              </Text>
+              <ListSetting
+                label="Ganti Nama"
+                onPress={() => navigation.navigate('UpdateName')}>
+                {/* <IcEdit
+                  style={{color: theme.textSetting}}
+                  fill={theme.textSetting}
+                /> */}
+                <Svg
+                  width="30"
+                  height="30"
+                  viewBox="0 0 30 30"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <Path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M25.9381 25.5494C26.4556 25.5494 26.8756 25.9694 26.8756 26.4869C26.8756 27.0044 26.4556 27.4244 25.9381 27.4244H16.8718C16.3543 27.4244 15.9343 27.0044 15.9343 26.4869C15.9343 25.9694 16.3543 25.5494 16.8718 25.5494H25.9381ZM20.1453 4.56705C20.2078 4.6158 22.2991 6.2408 22.2991 6.2408C23.0591 6.6933 23.6528 7.50205 23.8778 8.45955C24.1016 9.40705 23.9391 10.3846 23.4178 11.2108C23.4144 11.2163 23.4109 11.2218 23.3988 11.238L23.3894 11.2505C23.3048 11.362 22.937 11.827 21.0807 14.1528C21.0635 14.1833 21.0439 14.2118 21.0226 14.2396C20.9913 14.2804 20.9572 14.318 20.9209 14.3523C20.7942 14.5117 20.6605 14.6792 20.5199 14.8553L20.235 15.2121C19.6471 15.9483 18.9498 16.8214 18.1226 17.8568L17.698 18.3882C16.1009 20.3872 14.0555 22.9466 11.4353 26.2246C10.8616 26.9396 10.0016 27.3558 9.07784 27.3671L4.52909 27.4246H4.51659C4.08284 27.4246 3.70534 27.1271 3.60409 26.7033L2.58034 22.3646C2.36909 21.4658 2.57909 20.5383 3.15534 19.8183L14.9303 5.0908C14.9353 5.0858 14.9391 5.07955 14.9441 5.07455C16.2353 3.5308 18.5703 3.3033 20.1453 4.56705ZM13.6175 9.73375L4.61909 20.9896C4.40534 21.2571 4.32659 21.6021 4.40534 21.9333L5.25659 25.5396L9.05534 25.4921C9.41659 25.4883 9.75034 25.3271 9.97159 25.0521C11.1109 23.6265 12.5429 21.8348 14.0152 19.9925L14.536 19.3407L15.0578 18.6878C16.4385 16.9599 17.8026 15.2526 18.9439 13.8236L13.6175 9.73375ZM16.3878 6.2708L14.7888 8.26875L20.1147 12.3574C21.1399 11.0734 21.8142 10.2277 21.8766 10.1471C22.0816 9.81455 22.1616 9.34455 22.0541 8.89205C21.9441 8.4283 21.6553 8.03455 21.2391 7.7833C21.1503 7.72205 19.0441 6.08705 18.9791 6.0358C18.1866 5.4008 17.0303 5.5108 16.3878 6.2708Z"
+                    fill={theme.textSetting}
+                    fill-opacity="0.7"
+                  />
+                </Svg>
+              </ListSetting>
+              <Gap height={20} />
+              <View style={styles.line} />
+            </View>
+            <Gap height={50} />
+            <View style={styles.content}>
+              <Text style={[styles.title, {color: theme.textSetting2}]}>
+                Aplikasi
+              </Text>
+              <ListSetting label="Saran dan Masukkan">
+                <Svg
+                  width="30"
+                  height="30"
+                  viewBox="0 0 30 30"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <Path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M20.8235 2.5C24.986 2.5 28.1248 5.89625 28.1248 10.4V18.985C28.1248 21.29 27.3098 23.3725 25.8285 24.85C24.4998 26.1737 22.776 26.875 20.8435 26.875H8.52726C6.59851 26.875 4.87601 26.175 3.54601 24.85C2.06476 23.3725 1.24976 21.29 1.24976 18.985V10.4C1.24976 5.89625 4.38851 2.5 8.55101 2.5H20.8235ZM20.8235 4.375H8.55101C5.40726 4.375 3.12476 6.90875 3.12476 10.4V18.985C3.12476 20.7887 3.74476 22.4 4.86976 23.5212C5.83976 24.49 7.10601 25 8.53101 25H20.8235C20.826 24.9975 20.836 25 20.8435 25C22.2698 25 23.5348 24.49 24.5048 23.5212C25.631 22.4 26.2498 20.7887 26.2498 18.985V10.4C26.2498 6.90875 23.9673 4.375 20.8235 4.375ZM22.7935 10.161C23.1198 10.5623 23.0585 11.1522 22.6573 11.4797L17.1023 15.9948C16.3998 16.5522 15.5598 16.831 14.721 16.831C13.8848 16.831 13.051 16.5547 12.3535 16.0022L6.74726 11.4822C6.34351 11.1572 6.28101 10.566 6.60476 10.1635C6.93101 9.76225 7.52101 9.6985 7.92351 10.0222L13.5248 14.5372C14.2285 15.0947 15.2198 15.0948 15.9285 14.5323L21.4735 10.0248C21.876 9.696 22.466 9.7585 22.7935 10.161Z"
+                    fill={theme.textSetting}
+                    fill-opacity="0.7"
+                  />
+                </Svg>
+              </ListSetting>
+              <Gap height={20} />
+              <View style={styles.line} />
+              <ListSetting label="Beri Rating">
+                <Svg
+                  width="30"
+                  height="30"
+                  viewBox="0 0 30 30"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <Path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M14.6874 5.625C14.5736 5.625 14.2936 5.65625 14.1449 5.95375L11.8624 10.5175C11.5011 11.2387 10.8049 11.74 9.9999 11.855L4.88989 12.5912C4.5524 12.64 4.4374 12.89 4.4024 12.995C4.37115 13.0962 4.32115 13.3538 4.55365 13.5763L8.24864 17.1263C8.8374 17.6925 9.1049 18.5087 8.9649 19.3075L8.09489 24.32C8.04114 24.6337 8.23739 24.8162 8.32489 24.8787C8.4174 24.9487 8.6649 25.0875 8.97115 24.9275L13.5399 22.5588C14.2599 22.1875 15.1174 22.1875 15.8349 22.5588L20.4024 24.9263C20.7099 25.085 20.9574 24.9462 21.0511 24.8787C21.1386 24.8162 21.3349 24.6337 21.2811 24.32L20.4086 19.3075C20.2686 18.5087 20.5361 17.6925 21.1249 17.1263L24.8199 13.5763C25.0536 13.3538 25.0036 13.095 24.9711 12.995C24.9374 12.89 24.8224 12.64 24.4849 12.5912L19.3749 11.855C18.5711 11.74 17.8749 11.2387 17.5136 10.5163L15.2286 5.95375C15.0811 5.65625 14.8011 5.625 14.6874 5.625ZM8.68365 26.875C8.1674 26.875 7.6549 26.7125 7.21615 26.3925C6.45865 25.8375 6.0874 24.9212 6.24865 23.9987L7.11865 18.9862C7.15115 18.8 7.0874 18.6112 6.94989 18.4788L3.2549 14.9288C2.5749 14.2775 2.33115 13.315 2.61865 12.4213C2.90865 11.5175 3.67614 10.8712 4.6224 10.7362L9.73239 10C9.92989 9.9725 10.0999 9.85125 10.1849 9.67875L12.4686 5.11375C12.8899 4.2725 13.7399 3.75 14.6874 3.75C15.6349 3.75 16.4849 4.2725 16.9061 5.11375L19.1911 9.6775C19.2774 9.85125 19.4461 9.9725 19.6424 10L24.7524 10.7362C25.6986 10.8712 26.4661 11.5175 26.7561 12.4213C27.0436 13.315 26.7986 14.2775 26.1186 14.9288L22.4236 18.4788C22.2861 18.6112 22.2236 18.8 22.2561 18.985L23.1274 23.9987C23.2874 24.9225 22.9161 25.8388 22.1574 26.3925C21.3886 26.9563 20.3874 27.0325 19.5386 26.59L14.9724 24.2237C14.7936 24.1313 14.5799 24.1313 14.4011 24.2237L9.8349 26.5913C9.4699 26.7812 9.07615 26.875 8.68365 26.875Z"
+                    fill={theme.textSetting}
+                    fill-opacity="0.7"
+                  />
+                </Svg>
+              </ListSetting>
+              <Gap height={20} />
+              <View style={styles.line} />
+              <ListSetting
+                label="Tentang"
+                onPress={() => navigation.navigate('About')}>
+                <Svg
+                  width="30"
+                  height="30"
+                  viewBox="0 0 30 30"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <Path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M20.4175 2.5C24.6537 2.5 27.5 5.4725 27.5 9.895V20.105C27.5 24.5275 24.6537 27.5 20.415 27.5H9.58C5.345 27.5 2.5 24.5275 2.5 20.105V9.895C2.5 5.4725 5.345 2.5 9.58 2.5H20.4175ZM20.4175 4.375H9.58C6.41875 4.375 4.375 6.54125 4.375 9.895V20.105C4.375 23.4587 6.41875 25.625 9.58 25.625H20.415C23.58 25.625 25.625 23.4587 25.625 20.105V9.895C25.625 6.54125 23.58 4.375 20.4175 4.375ZM14.9925 14.0625C15.51 14.0625 15.93 14.4825 15.93 15V20C15.93 20.5175 15.51 20.9375 14.9925 20.9375C14.475 20.9375 14.055 20.5175 14.055 20V15C14.055 14.4825 14.475 14.0625 14.9925 14.0625ZM14.9986 9.00513C15.6899 9.00513 16.2486 9.56388 16.2486 10.2551C16.2486 10.9464 15.6899 11.5051 14.9986 11.5051C14.3074 11.5051 13.7424 10.9464 13.7424 10.2551C13.7424 9.56388 14.2961 9.00513 14.9861 9.00513H14.9986Z"
+                    fill={theme.textSetting}
+                    fill-opacity="0.7"
+                  />
+                </Svg>
+              </ListSetting>
+              <Gap height={20} />
+              <View style={styles.line} />
+            </View>
+            <Gap height={50} />
+            <View style={styles.content}>
+              <Text style={[styles.title, {color: theme.textSetting2}]}>
+                Tema
+              </Text>
+              <View style={styles.row}>
+                <ListSetting
+                  label="Dark Mode"
+                  saklar
+                  value={select}
+                  onValueChange={onValueChange}>
+                  <Svg
+                    width="30"
+                    height="30"
+                    viewBox="0 0 30 30"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <G clip-path="url(#clip0)">
+                      <Mask id="path-1-inside-1" fill="white">
+                        <Path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M16.7993 2.55821C14.2655 6.4913 13.9684 11.6694 16.4687 16C18.8086 20.0527 23.0161 22.3549 27.3764 22.4469C26.3016 24.1154 24.8242 25.5598 22.9871 26.6205C16.8193 30.1814 8.93267 28.0682 5.37173 21.9005C1.81079 15.7327 3.92401 7.84607 10.0917 4.28513C12.2067 3.06404 14.5238 2.51017 16.7993 2.55821Z"
+                        />
+                      </Mask>
+                      <Path
+                        d="M16.7993 2.55821L18.4807 3.64136C18.873 3.03239 18.9053 2.25888 18.5652 1.61927C18.2252 0.979657 17.5658 0.573941 16.8416 0.558652L16.7993 2.55821ZM27.3764 22.4469L29.0577 23.5301C29.4501 22.9211 29.4824 22.1476 29.1423 21.508C28.8022 20.8684 28.1429 20.4626 27.4186 20.4474L27.3764 22.4469ZM18.2008 15C16.0897 11.3435 16.3368 6.96915 18.4807 3.64136L15.118 1.47506C12.1943 6.01345 11.8472 11.9952 14.7367 17L18.2008 15ZM27.4186 20.4474C23.7285 20.3695 20.1765 18.4221 18.2008 15L14.7367 17C17.4406 21.6833 22.3037 24.3403 27.3342 24.4465L27.4186 20.4474ZM25.6951 21.3638C24.7885 22.7711 23.5423 23.9905 21.9871 24.8884L23.9871 28.3525C26.106 27.1291 27.8146 25.4597 29.0577 23.5301L25.6951 21.3638ZM21.9871 24.8884C16.7759 27.8971 10.1124 26.1116 7.10378 20.9005L3.63968 22.9005C7.7529 30.0248 16.8627 32.4657 23.9871 28.3525L21.9871 24.8884ZM7.10378 20.9005C4.09512 15.6893 5.88059 9.02584 11.0917 6.01718L9.09174 2.55308C1.96742 6.66631 -0.473549 15.7761 3.63968 22.9005L7.10378 20.9005ZM11.0917 6.01718C12.8815 4.98388 14.8366 4.51722 16.7571 4.55776L16.8416 0.558652C14.211 0.503123 11.532 1.1442 9.09174 2.55308L11.0917 6.01718Z"
+                        fill={theme.textSetting}
+                        fill-opacity="0.7"
+                        mask="url(#path-1-inside-1)"
+                      />
+                    </G>
+                    <Defs>
+                      <ClipPath id="clip0">
+                        <Rect width="30" height="30" fill="white" />
+                      </ClipPath>
+                    </Defs>
+                  </Svg>
+                </ListSetting>
+              </View>
+              <Gap height={20} />
+              <View style={styles.line} />
+            </View>
           </View>
-          <Gap height={20} />
-          <View style={styles.line} />
-        </View> */}
-        <View>
-          <IcMonth width={30} height={30} fill="blue" />
-        </View>
+        </ScrollView>
       </View>
-    </View>
+    </ThemeWrapper>
   );
 };
 

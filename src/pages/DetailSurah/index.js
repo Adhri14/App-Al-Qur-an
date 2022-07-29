@@ -6,20 +6,17 @@
 // /* eslint-disable no-use-before-define */
 // /* eslint-disable react/jsx-filename-extension */
 import Axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import {
-  ScrollView, StatusBar, StyleSheet, Text, View,
-} from 'react-native';
-import { ButtonBack, ListAyat, Skeleton } from '../../components';
-import { useTheme } from '../../components/atoms/Theme';
-import { API_AYAT } from '../../config';
-import { Colors, Fonts } from '../../utils';
+import React, {useEffect, useState} from 'react';
+import {ScrollView, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {ButtonBack, ListAyat, Skeleton} from '../../components';
+import {useTheme} from '../../components/atoms/Theme';
+import ThemeWrapper from '../../components/molecules/ThemeWrapper';
+import {API_AYAT} from '../../config';
+import {Colors, Fonts} from '../../utils';
 
-const DetailSurah = ({ navigation, route }) => {
+const DetailSurah = ({navigation, route}) => {
   const [loading, setLoading] = useState(false);
-  const {
-    nama, arti, ayat, nomor,
-  } = route.params;
+  const {nama, arti, ayat, nomor} = route.params;
 
   const [ayats, setAyat] = useState([]);
 
@@ -33,42 +30,61 @@ const DetailSurah = ({ navigation, route }) => {
 
   const getAyat = () => {
     Axios.get(`${API_AYAT(nomor)}`)
-      .then((res) => {
+      .then(res => {
         setLoading(true);
         setAyat(res.data);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
   };
 
-  const { theme } = useTheme();
+  const {theme} = useTheme();
 
   return (
-    <View style={[styles.page]}>
-      <StatusBar backgroundColor="transparent" translucent />
-      <ScrollView>
-        <View style={[styles.row, { backgroundColor: theme.backgroundColorSecond }]}>
-          <ButtonBack backgroundColor={theme.backgroundColorInput3} onPress={() => navigation.goBack()} />
-          <View>
-            <Text style={styles.title}>{nama}</Text>
-            <Text style={styles.subtitle}>{`${arti} . ${ayat} Ayat`}</Text>
+    <ThemeWrapper>
+      <View style={[styles.page]}>
+        <StatusBar backgroundColor="transparent" translucent />
+        <ScrollView>
+          <View
+            style={[
+              styles.row,
+              {backgroundColor: theme.backgroundColorSecond},
+            ]}>
+            <ButtonBack
+              backgroundColor={theme.backgroundColorInput3}
+              onPress={() => navigation.goBack()}
+            />
+            <View>
+              <Text style={styles.title}>{nama}</Text>
+              <Text style={styles.subtitle}>{`${arti} . ${ayat} Ayat`}</Text>
+            </View>
           </View>
-        </View>
-        <View style={[styles.body, , { backgroundColor: theme.backgroundColorMain }]}>
-          {(!loading || ayats.length === 0) && (
-            <Skeleton type="loading-ayat" />
-          )}
-          {loading && (
-            <>
-              {ayats.map((item) => (
-                <ListAyat key={item.nomor} number={item.nomor} title={item.id} arab={item.ar} />
-              ))}
-            </>
-          )}
-        </View>
-      </ScrollView>
-    </View>
+          <View
+            style={[
+              styles.body,
+              ,
+              {backgroundColor: theme.backgroundColorMain},
+            ]}>
+            {(!loading || ayats.length === 0) && (
+              <Skeleton type="loading-ayat" />
+            )}
+            {loading && (
+              <>
+                {ayats.map(item => (
+                  <ListAyat
+                    key={item.nomor}
+                    number={item.nomor}
+                    title={item.id}
+                    arab={item.ar}
+                  />
+                ))}
+              </>
+            )}
+          </View>
+        </ScrollView>
+      </View>
+    </ThemeWrapper>
   );
 };
 

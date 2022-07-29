@@ -1,36 +1,54 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
-  Image, ImageBackground, StatusBar, StyleSheet, Text, TouchableOpacity, View,
+  Image,
+  ImageBackground,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { IcBackOn, IlBackground, IlMessage } from '../../assets';
-import { Gap } from '../../components/atoms';
-import { useTheme } from '../../components/atoms/Theme';
-import { Colors, Fonts } from '../../utils';
+import {IcBackOn, IlBackground, IlMessage} from '../../assets';
+import {Gap} from '../../components/atoms';
+import {useTheme} from '../../components/atoms/Theme';
+import ThemeWrapper from '../../components/molecules/ThemeWrapper';
+import {Colors, Fonts} from '../../utils';
 
-const Play = ({ navigation }) => {
-  const { theme } = useTheme();
+const Play = ({navigation}) => {
+  const {theme} = useTheme();
   return (
-    <View style={[styles.page, { backgroundColor: theme.backgroundColorSecond }]}>
-      <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
-      <TouchableOpacity style={[styles.btn, { backgroundColor: theme.backgroundColorInput3 }]} onPress={() => navigation.goBack()}>
-        <IcBackOn />
-      </TouchableOpacity>
-      <View style={[styles.rounded1, { backgroundColor: theme.colorXlg }]}>
-        <View style={[styles.rounded2, { backgroundColor: theme.colorLg }]}>
-          <View style={[styles.rounded3, { backgroundColor: theme.colorM }]}>
-            <View style={[styles.rounded4, { backgroundColor: theme.colorSm }]}>
-              <Text style={styles.title}>Mohon Maaf!</Text>
-              <Gap height={20} />
-              <Text style={styles.subtitle}>Halaman ini masih dalam tahap</Text>
-              <Text style={styles.subtitle}>Pengembangan</Text>
+    <ThemeWrapper>
+      <View
+        style={[styles.page, {backgroundColor: theme.backgroundColorSecond}]}>
+        <StatusBar
+          translucent
+          backgroundColor="transparent"
+          barStyle="dark-content"
+        />
+        <TouchableOpacity
+          style={[styles.btn, {backgroundColor: theme.backgroundColorInput3}]}
+          onPress={() => navigation.goBack()}>
+          <IcBackOn />
+        </TouchableOpacity>
+        <View style={[styles.rounded1, {backgroundColor: theme.colorXlg}]}>
+          <View style={[styles.rounded2, {backgroundColor: theme.colorLg}]}>
+            <View style={[styles.rounded3, {backgroundColor: theme.colorM}]}>
+              <View style={[styles.rounded4, {backgroundColor: theme.colorSm}]}>
+                <Text style={styles.title}>Mohon Maaf!</Text>
+                <Gap height={20} />
+                <Text style={styles.subtitle}>
+                  Halaman ini masih dalam tahap
+                </Text>
+                <Text style={styles.subtitle}>Pengembangan</Text>
+              </View>
             </View>
           </View>
         </View>
+        <View style={styles.img}>
+          <Image source={IlMessage} style={styles.thumb} />
+        </View>
       </View>
-      <View style={styles.img}>
-        <Image source={IlMessage} style={styles.thumb} />
-      </View>
-    </View>
+    </ThemeWrapper>
   );
 };
 

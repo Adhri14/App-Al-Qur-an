@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
-import { TextInput } from 'react-native';
-import { Colors } from '../Colors';
+import {TextInput} from 'react-native';
+import {Colors} from '../Colors';
 
 export const defaultTheme = {
   textSecondary: Colors.SecondaryColor,
@@ -20,6 +20,7 @@ export const defaultTheme = {
   textSetting2: Colors.TintPrimary,
   textAbout: Colors.TintPrimary,
   textAyat: Colors.TintPrimary,
+  themeMode: 'default',
 };
 
 export const darkTheme = {
@@ -39,4 +40,5 @@ export const darkTheme = {
   textSetting2: Colors.Other,
   textAbout: Colors.TintSecondary,
   textAyat: Colors.TintSecondary,
+  themeMode: 'dark',
 };

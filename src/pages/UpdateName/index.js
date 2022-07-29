@@ -1,18 +1,21 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-filename-extension */
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  StyleSheet, Text, TextInput, TouchableOpacity, View,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { ButtonBack, Gap } from '../../components';
-import { useTheme } from '../../components/atoms/Theme';
-import { FirebaseApp } from '../../config';
-import {
-  Colors, Fonts, getData, storeData, useForm,
-} from '../../utils';
+import {ButtonBack, Gap} from '../../components';
+import {useTheme} from '../../components/atoms/Theme';
+import ThemeWrapper from '../../components/molecules/ThemeWrapper';
+import {FirebaseApp} from '../../config';
+import {Colors, Fonts, getData, storeData, useForm} from '../../utils';
 
-const UpdateName = ({ navigation }) => {
+const UpdateName = ({navigation}) => {
   const [dataUser, setDataUser] = useState({
     name: '',
   });
@@ -22,15 +25,15 @@ const UpdateName = ({ navigation }) => {
   });
 
   useEffect(() => {
-    getData('user').then((res) => {
-      setDataUser(res);
+    getData('user').then(res => {
+      setDataUser({name: res?.name});
     });
 
     FirebaseApp.database()
       .ref(`biodata/${dataUser.name}`)
-      .once('value', (res) => {
+      .once('value', res => {
         const data = res.val() ? res.val() : {};
-        const item = { ...data };
+        const item = {...data};
 
         setForm({
           name: item.name,
@@ -49,23 +52,43 @@ const UpdateName = ({ navigation }) => {
     navigation.replace('MainApp');
   };
 
-  const { theme } = useTheme();
+  const {theme} = useTheme();
 
   return (
-    <View style={[styles.page, { backgroundColor: theme.backgroundColorMain }]}>
-      <View style={styles.header}>
-        <ButtonBack onPress={() => navigation.goBack()} icon backgroundColor={theme.backgroundColorInput1} />
-        <Text style={styles.title}>Ganti Nama</Text>
+    <ThemeWrapper>
+      <View style={[styles.page, {backgroundColor: theme.backgroundColorMain}]}>
+        <View style={styles.header}>
+          <ButtonBack
+            onPress={() => navigation.goBack()}
+            icon
+            backgroundColor={theme.backgroundColorInput1}
+          />
+          <Text style={styles.title}>Ganti Nama</Text>
+        </View>
+        <View style={styles.row}>
+          <TextInput
+            placeholder="Masukkan Nama"
+            value={form.name}
+            onChangeText={text => setForm('name', text)}
+            style={[
+              styles.input,
+              {backgroundColor: theme.backgroundColorInput1},
+            ]}
+            placeholderTextColor={Colors.PrimaryColor}
+          />
+          <Gap width={10} />
+          <TouchableOpacity
+            onPress={onSubmit}
+            style={[
+              styles.btn,
+              {backgroundColor: theme.backgroundColorInput1},
+            ]}>
+            <Text style={styles.textBtn}>simpan</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.text}>Kotak input tidak boleh kosong*</Text>
       </View>
-      <View style={styles.row}>
-        <TextInput placeholder="Masukkan Nama" value={form.name} onChangeText={(text) => setForm('name', text)} style={[styles.input, { backgroundColor: theme.backgroundColorInput1 }]} placeholderTextColor={Colors.PrimaryColor} />
-        <Gap width={10} />
-        <TouchableOpacity onPress={onSubmit} style={[styles.btn, { backgroundColor: theme.backgroundColorInput1 }]}>
-          <Text style={styles.textBtn}>simpan</Text>
-        </TouchableOpacity>
-      </View>
-      <Text style={styles.text}>Kotak input tidak boleh kosong*</Text>
-    </View>
+    </ThemeWrapper>
   );
 };
 

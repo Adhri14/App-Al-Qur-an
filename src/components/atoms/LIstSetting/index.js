@@ -1,32 +1,43 @@
 /* eslint-disable react/jsx-filename-extension */
-import React, { Children, useContext, useState } from 'react';
-import {
-  StyleSheet, Switch, Text, TouchableOpacity, View,
-} from 'react-native';
-import { IcEdit } from '../../../assets';
-import { Colors, Fonts } from '../../../utils';
-import { useTheme } from '../Theme';
+import React, {Children, useContext, useState} from 'react';
+import {StyleSheet, Switch, Text, TouchableOpacity, View} from 'react-native';
+import {IcEdit} from '../../../assets';
+import {Colors, Fonts} from '../../../utils';
+import {useTheme} from '../Theme';
 
 const ListSetting = ({
-  label, children, saklar, onPress,
+  label,
+  children,
+  saklar,
+  onPress,
+  value,
+  onValueChange,
+  thumbColor,
 }) => {
-  const [isState, setIsState] = useState(false);
-  const toggleSwitch = () => setIsState((previousState) => !previousState);
+  // const [isState, setIsState] = useState(false);
+  // const toggleSwitch = () => setIsState((previousState) => !previousState);
 
-  const { theme } = useTheme();
+  const {theme} = useTheme();
 
   return (
-    <TouchableOpacity activeOpacity={0.9} style={styles.container} onPress={onPress}>
+    <TouchableOpacity
+      activeOpacity={0.9}
+      style={styles.container}
+      onPress={onPress}>
       {children}
       <View style={styles.row}>
-        <Text style={[styles.label, { color: theme.textSetting }]}>{label}</Text>
+        <Text style={[styles.label, {color: theme.textSetting}]}>{label}</Text>
         {saklar && (
-        <Switch
-          trackColor={{ false: Colors.TintSecondary, true: Colors.BackgroundSecondary }}
-          thumbColor={isState ? Colors.PrimaryColor : Colors.Other}
-          onValueChange={toggleSwitch}
-          value={isState}
-        />
+          <Switch
+            trackColor={{
+              false: Colors.TintSecondary,
+              true: Colors.BackgroundSecondary,
+            }}
+            // thumbColor={isState ? Colors.PrimaryColor : Colors.Other}
+            thumbColor={thumbColor}
+            onValueChange={onValueChange}
+            value={value}
+          />
         )}
       </View>
     </TouchableOpacity>

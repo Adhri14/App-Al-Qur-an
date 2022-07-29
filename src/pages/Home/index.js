@@ -1,19 +1,25 @@
 /* eslint-disable react/jsx-filename-extension */
-import React, { useState, useEffect, useContext } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
-  ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import Axios from 'axios';
 import Geocoder from 'react-native-geocoding';
 import Geolocation from 'react-native-geolocation-service';
-import { IcSearch, IlLighting } from '../../assets';
-import { Gap, HeaderTitle } from '../../components/atoms';
-import { Skeleton, Surah } from '../../components/molecules';
-import { API_DATE, API_SURAH, time } from '../../config';
-import { Colors, Fonts, getData } from '../../utils';
-import { useTheme } from '../../components/atoms/Theme';
+import {IcSearch, IlLighting} from '../../assets';
+import {Gap, HeaderTitle} from '../../components/atoms';
+import {Skeleton, Surah} from '../../components/molecules';
+import {API_DATE, API_SURAH, time} from '../../config';
+import {Colors, Fonts, getData} from '../../utils';
+import {useTheme} from '../../components/atoms/Theme';
+import ThemeWrapper from '../../components/molecules/ThemeWrapper';
 
-const Home = ({ navigation }) => {
+const Home = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const [surah, setSurah] = useState([]);
   const [data, setData] = useState({
@@ -32,15 +38,22 @@ const Home = ({ navigation }) => {
     address: null,
   });
 
-  const [dt, setDt] = useState(new Date().toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' }).replace(/(:\d{2}| [AP]M)$/, ''));
+  const [dt, setDt] = useState(
+    new Date()
+      .toLocaleTimeString(navigator.language, {
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+      .replace(/(:\d{2}| [AP]M)$/, ''),
+  );
 
   useEffect(() => {
     // Ambil data location
     // getDataLocation();
 
     // Ambil Data User di local storage
-    getData('user').then((res) => {
-      setData(res);
+    getData('user').then(res => {
+      setData({name: res?.name});
     });
 
     // Ambil data surah di API
@@ -50,28 +63,34 @@ const Home = ({ navigation }) => {
     getDataDate();
 
     setInterval(() => {
-      setDt(new Date().toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' }).replace(/(:\d{2}| [AP]M)$/, ''));
+      setDt(
+        new Date()
+          .toLocaleTimeString(navigator.language, {
+            hour: '2-digit',
+            minute: '2-digit',
+          })
+          .replace(/(:\d{2}| [AP]M)$/, ''),
+      );
     });
   }, []);
 
   const getDataSurah = () => {
     Axios.get(`${API_SURAH}`)
-      .then((res) => {
+      .then(res => {
         setLoading(true);
         setSurah(res.data);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   };
 
   const getDataDate = () => {
-    Axios.get(`${API_DATE}`)
-      .then((res) => {
-        setDate({
-          day: res.data.data.hijri.day,
-          month: res.data.data.hijri.month.en,
-          year: res.data.data.hijri.year,
-        });
+    Axios.get(`${API_DATE}`).then(res => {
+      setDate({
+        day: res.data.data.hijri.day,
+        month: res.data.data.hijri.month.en,
+        year: res.data.data.hijri.year,
       });
+    });
   };
 
   // const getDataLocation = () => {
@@ -107,60 +126,75 @@ const Home = ({ navigation }) => {
   //   );
   // };
 
-  const { theme } = useTheme();
+  const {theme, isLoading} = useTheme();
 
   return (
-    <View style={[styles.page, { backgroundColor: theme.backgroundColorMain }]}>
-      <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <HeaderTitle />
-        <View style={styles.welcome}>
-          <Text style={[styles.title, { color: theme.textSecondary }]}>Assalamualaikum,</Text>
-          <Text style={[styles.name, { color: theme.textPrimary }]}>{data.name ? data.name : 'Unknown'}</Text>
-        </View>
-        <Gap height={30} />
-        <View style={[styles.info, { backgroundColor: theme.backgroundColorSecond }]}>
-          <IlLighting style={styles.illustration} />
-          <Text style={styles.date}>
-            {`${date.day} ${date.month} ${date.year}`}
-          </Text>
-          <View style={styles.row}>
-            <Text style={styles.city}>
-              Waktu anda saat ini :
+    <ThemeWrapper>
+      <View style={[styles.page, {backgroundColor: theme.backgroundColorMain}]}>
+        <StatusBar
+          translucent
+          backgroundColor="transparent"
+          barStyle="dark-content"
+        />
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <HeaderTitle />
+          <View style={styles.welcome}>
+            <Text style={[styles.title, {color: theme.textSecondary}]}>
+              Assalamualaikum,
             </Text>
-            <Text style={styles.time}>{dt}</Text>
+            <Text style={[styles.name, {color: theme.textPrimary}]}>
+              {data.name !== null || data.name !== undefined || data.name !== ''
+                ? data.name
+                : 'Unknown'}
+            </Text>
           </View>
-        </View>
-        <Gap height={30} />
-        <View style={styles.row}>
-          <Text style={styles.surah}>Surah</Text>
-          <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Search', { surah })}>
-            <IcSearch />
-          </TouchableOpacity>
-        </View>
-        <Gap height={30} />
-        <View style={styles.listSurah}>
-          {(!loading || surah.length === 0) && (
-            <Skeleton type="loading-surah" />
-          )}
-          {loading && (
-            <>
-              {surah.map((item) => (
-                <Surah
-                  key={item.nomor}
-                  number={item.nomor}
-                  title={item.nama}
-                  subtitle={item.arti}
-                  arab={item.asma}
-                  onPress={() => navigation.navigate('DetailSurah', item)}
-                />
-              ))}
-            </>
-          )}
-
-        </View>
-      </ScrollView>
-    </View>
+          <Gap height={30} />
+          <View
+            style={[
+              styles.info,
+              {backgroundColor: theme.backgroundColorSecond},
+            ]}>
+            <IlLighting style={styles.illustration} />
+            <Text style={styles.date}>
+              {`${date.day} ${date.month} ${date.year}`}
+            </Text>
+            <View style={styles.row}>
+              <Text style={styles.city}>Waktu anda saat ini :</Text>
+              <Text style={styles.time}>{dt}</Text>
+            </View>
+          </View>
+          <Gap height={30} />
+          <View style={styles.row}>
+            <Text style={styles.surah}>Surah</Text>
+            <TouchableOpacity
+              style={styles.btn}
+              onPress={() => navigation.navigate('Search', {surah})}>
+              <IcSearch />
+            </TouchableOpacity>
+          </View>
+          <Gap height={30} />
+          <View style={styles.listSurah}>
+            {(!loading || surah.length === 0) && (
+              <Skeleton type="loading-surah" />
+            )}
+            {loading && (
+              <>
+                {surah.map(item => (
+                  <Surah
+                    key={item.nomor}
+                    number={item.nomor}
+                    title={item.nama}
+                    subtitle={item.arti}
+                    arab={item.asma}
+                    onPress={() => navigation.navigate('DetailSurah', item)}
+                  />
+                ))}
+              </>
+            )}
+          </View>
+        </ScrollView>
+      </View>
+    </ThemeWrapper>
   );
 };
 

@@ -1,43 +1,58 @@
 /* eslint-disable react/jsx-filename-extension */
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
   Dimensions,
-  ImageBackground, StatusBar, StyleSheet, Text, View,
+  ImageBackground,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
-import { IlBackground } from '../../assets';
-import { useTheme } from '../../components/atoms/Theme';
-import { FirebaseApp } from '../../config';
-import { Colors, Fonts } from '../../utils';
+import {IlBackground} from '../../assets';
+import {useTheme} from '../../components/atoms/Theme';
+import ThemeWrapper from '../../components/molecules/ThemeWrapper';
+import {FirebaseApp} from '../../config';
+import {Colors, Fonts} from '../../utils';
 
-const SplashScreen = ({ navigation }) => {
+const SplashScreen = ({navigation}) => {
   useEffect(() => {
-    const unsubs = FirebaseApp.database().ref('biodata/').once('value').then((res) => {
-      setTimeout(() => {
-        if (!res) {
-          navigation.replace('PageName');
-        } else {
-          navigation.replace('MainApp');
-        }
-      }, 3000);
-    });
+    const unsubs = FirebaseApp.database()
+      .ref('biodata/')
+      .once('value')
+      .then(res => {
+        setTimeout(() => {
+          if (!res) {
+            navigation.replace('PageName');
+          } else {
+            navigation.replace('MainApp');
+          }
+        }, 3000);
+      });
 
     return () => unsubs();
   }, [navigation]);
 
-  const { theme } = useTheme();
+  const {theme} = useTheme();
   return (
-    <View style={[styles.page, { backgroundColor: theme.backgroundColorSecond }]}>
-      <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
-      <View style={[styles.rounded1, { backgroundColor: theme.colorXlg }]}>
-        <View style={[styles.rounded2, { backgroundColor: theme.colorLg }]}>
-          <View style={[styles.rounded3, { backgroundColor: theme.colorM }]}>
-            <View style={[styles.rounded4, { backgroundColor: theme.colorSm }]}>
-              <Text style={styles.title}>Qur'anKu</Text>
+    <ThemeWrapper>
+      <View
+        style={[styles.page, {backgroundColor: theme.backgroundColorSecond}]}>
+        <StatusBar
+          translucent
+          backgroundColor="transparent"
+          barStyle="dark-content"
+        />
+        <View style={[styles.rounded1, {backgroundColor: theme.colorXlg}]}>
+          <View style={[styles.rounded2, {backgroundColor: theme.colorLg}]}>
+            <View style={[styles.rounded3, {backgroundColor: theme.colorM}]}>
+              <View style={[styles.rounded4, {backgroundColor: theme.colorSm}]}>
+                <Text style={styles.title}>Qur'anKu</Text>
+              </View>
             </View>
           </View>
         </View>
       </View>
-    </View>
+    </ThemeWrapper>
   );
 };
 
