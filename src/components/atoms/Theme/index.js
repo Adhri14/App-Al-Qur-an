@@ -8,11 +8,13 @@ const ThemeContext = createContext();
 
 const Theme = ({children}) => {
   const [theme, setTheme] = useState(defaultTheme);
+  const [switchTheme, setSwitchTheme] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const findOldTheme = async () => {
     const themeMode = await getData('theme');
     if (themeMode !== null) {
       themeMode === 'default' ? setTheme(defaultTheme) : setTheme(darkTheme);
+      // setSwitchTheme(themeMode === 'dark' ? true : false);
       setIsLoading(false);
     }
     setIsLoading(false);
@@ -22,6 +24,7 @@ const Theme = ({children}) => {
     const newTheme = currentTheme === 'default' ? defaultTheme : darkTheme;
     // console.log('mode : ', newTheme);
     setTheme(newTheme);
+    // setSwitchTheme(newTheme);
     storeData('theme', currentTheme);
   };
 
@@ -30,7 +33,8 @@ const Theme = ({children}) => {
   }, []);
 
   return (
-    <ThemeContext.Provider value={{theme, isLoading, updateTheme}}>
+    <ThemeContext.Provider
+      value={{theme, isLoading, updateTheme, switchTheme, setSwitchTheme}}>
       {children}
     </ThemeContext.Provider>
   );

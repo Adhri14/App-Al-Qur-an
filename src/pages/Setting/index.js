@@ -17,7 +17,7 @@ import ThemeWrapper from '../../components/molecules/ThemeWrapper';
 import {Colors, Fonts, storeData} from '../../utils';
 
 const Setting = ({navigation}) => {
-  const {theme, updateTheme} = useTheme();
+  const {theme, updateTheme, switchTheme} = useTheme();
   const [select, setSelect] = useState(false);
   // const changeTheme = (value) => {
 
@@ -26,10 +26,12 @@ const Setting = ({navigation}) => {
     if (select) {
       // storeData('theme', {theme: 'dark'});
       updateTheme('default');
+      // setSwitchTheme(false);
     } else {
       // storeData('theme', {theme: 'default'});
       updateTheme('dark');
     }
+    // setSwitchTheme(!switchTheme);
     setSelect(!select);
   };
 
